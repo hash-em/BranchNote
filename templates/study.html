@@ -24,30 +24,87 @@
                  <div class="tree-container">
                     <div class="tree mt-3">
                         <div class="tree-node tree-head">
-                            <div class="symbol">{{tree.head}}</div>
+                            <div class="symbol">{{tree.head}} <span class="badge bg-primary">Head</span></div>
                             <div class="description">{{ tree.description }}</div>
                         </div>
                         
                         <div class="tree-body">
                             {% for node in tree.children recursive %}
-                                <div class="branch_head d-flex mx-4 mb-2" id="{{node.head}}">
+                                {% if node.children %}
+                                <div class="branch-head d-flex mx-4 mb-2" id="{{node.head}}">
                                     <div class="tree-node">
-                                        <div class="symbol">{{ node.head }}</div>
+                                        <div class="symbol">{{ node.head }}
+                                            <span class="position-absolute top-50 start-0 translate-middle p-2 border border-light rounded-circle node-link">
+                                                <span class="visually-hidden">New alerts</span>
+                                            </span>
+                                            
+                                        </div>
                                         <div class="description">{{ node.description }}</div>
                                     </div>
-                                {% if node.children %}
+
+                                    <!--Create children recursively by jumping back to the loop with the child as 'tree' (jinja does the work just explaining)-->
                                     <div class="branch-children ">
                                         {{ loop(node.children) }}
                                     </div>
+
+                                {% else %}
+                                <div class="leaf d-flex mx-4 mb-2" id="{{node.head}}">
+                                    <div class="tree-node">
+                                        <div class="symbol">{{ node.head }}
+                                            <span class="position-absolute top-50 start-0 translate-middle p-2 border border-light rounded-circle node-link">
+                                                <span class="visually-hidden">New alerts</span>
+                                              </span>
+                                            
+                                        </div>
+                                        <div class="description">{{ node.description }}</div>
+                                    </div>
+
                                 {% endif %}
                                 </div>
                             {% endfor %}
                         </div>
                     </div>
+                    <!--TODO-->
+                    <div class="node-links mt-3">
+                        
+                    </div>
                 </div>
                 <div class="tree-footer my-3">
                 <button  class="btn mx-2">Previous</button><button class="btn mx-2">Next</button>
                 </div>
+                 <script>
+                    let locations = [];
+                    function getPosition(el) {
+                        let pos_x = el.offsetLeft;
+                        let pos_y = el.offsetTop;
+                        let pos = {'x': pos_x, 'y': pos_y};
+                        locations.push(pos);
+                    }
+                    let head = document.querySelector(".tree-head");
+                    getPosition(head);
+                    let divs = document.querySelectorAll(".branch-head");
+                    divs.forEach(function(element) {
+                        getPosition(element);
+                    });
+
+                    let location_count = locations.length;
+                    for (let i = 0; i < location_count - 1; i++) {
+                        let min = locations[i].x;
+                        let min_pos = i;
+                        for (let j = i + 1; j < location_count; j++) {
+                            if (locations[j].x < min) {
+                                min = locations[j].x;
+                                min_pos = j;
+                            }
+                        }
+                        if (min_pos != i) {
+                            let temp = locations[i];
+                            locations[i] = locations[min_pos];
+                            locations[min_pos] = temp;
+                        }
+                    }
+                    console.log(locations);
+                 </script>
                  {% endif %}
 
             </div>
