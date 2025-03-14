@@ -1,0 +1,138 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f2f5;
+}
+
+#markdown-display {
+    overflow: scroll !important;
+    height: 70vh;
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    padding: 1rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+}
+
+.menu {
+    background-color: #ffffff;
+    padding: 1rem;
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#todo-aside {
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    padding: 1rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+}
+
+#todo-aside.active {
+    display: block;
+}
+
+aside h5 {
+    text-align: center;
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+}
+
+aside {
+    padding: 1rem;
+}
+
+.container-fluid {
+    padding: 2rem;
+}
+
+button.btn {
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
+    border-radius: 0.25rem;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button.btn:hover {
+    background-color: #0056b3;
+}
+
+.tree-container {
+    position: relative;
+    display: block;
+}
+
+.tree {
+    position: relative;
+    display: inline-flex;
+    gap: 1rem;
+    overflow: hidden;
+}
+
+.tree-node {
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    padding: 1rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100px;
+    height: 60px;
+    text-align: center;
+}
+
+.tree .symbol {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.tree-node .description {
+    font-size: 1rem;
+    color: #6c757d;
+}
+
+.branch {
+    display: block;
+}
+
+.branch-children {
+    display: inline;
+}
+
+.branch > .tree-node {
+    display: inline-block;
+}
+
+.branch > * {
+    display: inline;
+}
+.branch-head {
+    display: inline-flex;
+}
+
+.tree-head {
+    align-self: center;
+    justify-self: center;
+    margin-right: 20px;
+}
+.tree-footer {
+    display: flex;
+    justify-content: center;
+}
+
+.tree-footer button {
+    width: 30%;
+    align-self: flex-end;
+    align-items: flex-end;
+}
+
+/*positioning the line*/
