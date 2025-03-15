@@ -44,7 +44,7 @@
                                     </div>
 
                                     <!--Create children recursively by jumping back to the loop with the child as 'tree' (jinja does the work just explaining)-->
-                                    <div class="branch-children" id="{{ node.head }}">
+                                    <div class="branch-children ">
                                         {{ loop(node.children) }}
                                     </div>
 
@@ -73,7 +73,39 @@
                 <div class="tree-footer my-3">
                 <button  class="btn mx-2">Previous</button><button class="btn mx-2">Next</button>
                 </div>
+                 <script>
+                    let locations = [];
+                    function getPosition(el) {
+                        let pos_x = el.offsetLeft;
+                        let pos_y = el.offsetTop;
+                        let pos = {'x': pos_x, 'y': pos_y};
+                        locations.push(pos);
+                    }
+                    let head = document.querySelector(".tree-head");
+                    getPosition(head);
+                    let divs = document.querySelectorAll(".branch-head");
+                    divs.forEach(function(element) {
+                        getPosition(element);
+                    });
 
+                    let location_count = locations.length;
+                    for (let i = 0; i < location_count - 1; i++) {
+                        let min = locations[i].x;
+                        let min_pos = i;
+                        for (let j = i + 1; j < location_count; j++) {
+                            if (locations[j].x < min) {
+                                min = locations[j].x;
+                                min_pos = j;
+                            }
+                        }
+                        if (min_pos != i) {
+                            let temp = locations[i];
+                            locations[i] = locations[min_pos];
+                            locations[min_pos] = temp;
+                        }
+                    }
+                    console.log(locations);
+                 </script>
                  {% endif %}
 
             </div>

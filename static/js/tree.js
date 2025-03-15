@@ -1,5 +1,5 @@
 // this is test message
-
+// this is master branch 100%
 function main() {
     let locations = [];
 
