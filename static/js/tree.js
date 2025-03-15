@@ -1,5 +1,5 @@
 // this is test message
-// this is master talking
+
 function main() {
     let locations = [];
 
