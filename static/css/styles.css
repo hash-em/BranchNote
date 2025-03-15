@@ -78,7 +78,7 @@ button.btn:hover {
     overflow: hidden;
 }
 
-.tree-node {
+.tree-node,.leaf {
     background-color: #ffffff;
     border: 1px solid #dee2e6;
     border-radius: 0.25rem;
@@ -90,19 +90,6 @@ button.btn:hover {
     position: relative;
 }
 
-.tree-node::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: -20px;
-    width: 20px;
-    height: 2px;
-    background-color: #000;
-}
-
-.tree-node:first-child::before {
-    display: none;
-}
 
 .tree .symbol {
     font-size: 1rem;
