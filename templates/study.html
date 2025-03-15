@@ -21,6 +21,7 @@
 
                  <!-- Basic tree search  -->
                  {% if tree %}
+                 <script src="/static/js/tree.js"></script>
                  <div class="tree-container">
                     <div class="tree mt-3">
                         <div class="tree-node tree-head">
@@ -28,7 +29,7 @@
                             <div class="description">{{ tree.description }}</div>
                         </div>
                         
-                        <div class="tree-body">
+                        <div id="tree-body">
                             {% for node in tree.children recursive %}
                                 {% if node.children %}
                                 <div class="branch-head d-flex mx-4 mb-2" id="{{node.head}}">
@@ -43,7 +44,7 @@
                                     </div>
 
                                     <!--Create children recursively by jumping back to the loop with the child as 'tree' (jinja does the work just explaining)-->
-                                    <div class="branch-children ">
+                                    <div class="branch-children" id="{{ node.head }}">
                                         {{ loop(node.children) }}
                                     </div>
 
