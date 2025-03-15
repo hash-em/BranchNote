@@ -4,7 +4,6 @@ function main() {
     let locations = [];
 
     let nodes = document.querySelectorAll(".tree-node","visible");
-    console.log(nodes)
     nodes.forEach(function(node) {
         locations.push(getPosition(node));
     });
@@ -51,11 +50,17 @@ function getPosition(el) {
     return pos;
 }
 
-
-
-function connectDots(a,b)
-{
-    console.log("a : ",a.node,a.x,a.y,"b",b.node,b.x,b.y)
+function connectDots(a, b) {
+    // Ensure the container exists
+    console.log(a.x, a.y, a.node, b.x, b.y, b.node);
+    
+    // Create the line element
+    let line = `<svg id="node-link" viewBox="0 0 ${window.innerWidth} ${window.innerHeight}" width="${window.innerWidth}" height="${window.innerHeight}" style="position:absolute; z-index: -1;">
+    <line x1="${a.x + a.node.offsetWidth}" y1="${a.y + a.node.offsetHeight / 4.7}" x2="${b.x}" y2="${b.y + b.node.offsetHeight / 3.6}" stroke="black" stroke-width="2"/>
+    </svg>`;
+    
+    // Append to the SVG container
+    document.getElementById("node-links").innerHTML += line;
 }
 
 

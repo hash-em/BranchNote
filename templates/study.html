@@ -23,13 +23,13 @@
                  {% if tree %}
                  <script src="/static/js/tree.js"></script>
                  <div class="tree-container">
-                    <div class="tree mt-3">
+                    <div id="tree" class="tree mt-3">
                         <div class="tree-node tree-head">
                             <div class="symbol">{{tree.head}} <span class="badge bg-primary">Head</span></div>
                             <div class="description">{{ tree.description }}</div>
                         </div>
                         
-                        <div id="tree-body">
+                        <div id="tree-body" style="z-index: 10;">
                             {% for node in tree.children recursive %}
                                 {% if node.children %}
                                 <div class="branch-head d-flex mx-4 mb-2" id="{{node.head}}">
@@ -64,16 +64,15 @@
                                 </div>
                             {% endfor %}
                         </div>
-                    </div>
-                    <!--TODO-->
-                    <div class="node-links mt-3">
-                        
-                    </div>
-                </div>
-                <div class="tree-footer my-3">
-                <button  class="btn mx-2">Previous</button><button class="btn mx-2">Next</button>
-                </div>
 
+                        <!--TODO : populate node links-->
+                        <div id="node-links" class="node-links mt-3 position-absolute" style="z-index: 1;"></div>
+                    <!--Tree end below-->
+                    </div>
+                    </div>
+                    <div class="tree-footer my-3">
+                    <button  class="btn mx-2">Previous</button><button class="btn mx-2">Next</button>
+                </div>
                  {% endif %}
 
             </div>
