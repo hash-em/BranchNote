@@ -104,7 +104,7 @@ def display_study():
                 tags,exercice = extract_tags(exercice)
                 exercice = markdown(exercice)
 
-            return render_template("study.html", todo=todo, exercice = exercice, tags = tags , name = query)
+            return render_template("study.html", todo=todo, exercice = exercice, tags = tags , name = query, tree=test)
         except : 
             flash("couldn't find")
             return redirect("/study")

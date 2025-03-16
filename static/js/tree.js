@@ -50,20 +50,49 @@ function getPosition(el) {
     return pos;
 }
 
+let connections = []
 function connectDots(a, b) {
     // Ensure the container exists
     console.log(a.x, a.y, a.node, b.x, b.y, b.node);
-    
     // Create the line element
-    let line = `<svg id="node-link" viewBox="0 0 ${window.innerWidth} ${window.innerHeight}" width="${window.innerWidth}" height="${window.innerHeight}" style="position:absolute; z-index: -1;">
-    <line x1="${a.x + a.node.offsetWidth}" y1="${a.y + a.node.offsetHeight / 4.7}" x2="${b.x}" y2="${b.y + b.node.offsetHeight / 3.6}" stroke="black" stroke-width="2"/>
-    </svg>`;
-    
+    let svgNS = "http://www.w3.org/2000/svg";
+    let line = document.createElementNS(svgNS, "line");
+    let svg = document.createElementNS(svgNS, "svg");
+    svg.appendChild(line);
+    setSize(svg)
+    connection = {'a':a,'b':b,'svg':svg}
+    console.log(connection)
+    function setSize(connection)
+    {
+        /*let svg = connection.svg;
+        let line = svg.find("line");*/
+        line.setAttribute("x1", a.x + a.node.offsetWidth);
+        line.setAttribute("y1", a.y + a.node.offsetHeight / 4.7);
+        line.setAttribute("x2", b.x);
+        line.setAttribute("y2", b.y + b.node.offsetHeight / 3.6);
+        line.setAttribute("stroke", "black");
+        line.setAttribute("stroke-width", "2");
+        svg.setAttribute("id", "node-link");
+        svg.setAttribute("viewBox", `0 0 ${window.innerWidth} ${window.innerHeight}`);
+        svg.setAttribute("width", window.innerWidth);
+        svg.setAttribute("height", window.innerHeight);
+        svg.setAttribute("style", "position:absolute; z-index: -1;");
+    }
+    document.getElementById("node-links").append(svg);
+    connections.push(connection)
     // Append to the SVG container
-    document.getElementById("node-links").innerHTML += line;
+
+    function setManySize()
+    {
+        connections.forEach(function(connection)
+    {
+        setSize(connection)
+    })
+    }
 }
 
 
 window.addEventListener('load', main);
+window.addEventListener('resize', setSizes);
 
 
