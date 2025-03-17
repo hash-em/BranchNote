@@ -27,16 +27,16 @@
                         </div>
                         <div class="tree-container col-md-7" style="overflow: scroll;">                  
                             <div id="tree" class="tree mt-3" style="overflow: scroll;">
-                                <div id="tree-head" class="tree-node tree-head" children="{{tree.children}}">
+                                <div id="{{ tree.head }}" class="tree-node tree-head" children="{{tree.children}}">
                                     <div class="symbol"">{{tree.head}} <span class="badge bg-primary">Head</span></div>
                                     <div class="description">{{ tree.description }}</div>
                                 </div>
                                 
-                                <div id="tree-body" style="z-index: 10;">
+                                <div id="{{tree.head}}" class="tree-body" style="z-index: 10;">
                                     {% for node in tree.children recursive %}
                                         {% if node.children %}
                                         <div class="branch-head d-flex mx-4 mb-2" id="{{node.head}}" children="{{node.children}}">
-                                            <div class="tree-node">
+                                            <div class="tree-node" id="{{node.head}}">
                                                 <div class="symbol">{{ node.head }}
                                                     <span class="position-absolute top-50 start-0 translate-middle p-2 border border-light rounded-circle node-link">
                                                         <span class="visually-hidden">New alerts</span>
@@ -46,7 +46,7 @@
                                                 <div class="description">{{ node.description }}</div>
                                             </div>
                                             <!--Create children recursively by jumping back to the loop with the child as 'tree' (jinja does the work just explaining)-->
-                                            <div class="branch-children ">
+                                            <div id="{{ node.head }}" class="branch-children ">
                                                 {{ loop(node.children) }}
                                             </div>
                                         {% else %}
@@ -81,6 +81,10 @@
                             {% if exercice %}
                                 {{ exercice | safe }}
                             {% endif %}
+                            <h3>Explication</h3>
+                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores saepe delectus minus, cumque voluptate harum deleniti vitae dignissimos ad possimus unde beatae eveniet et voluptatum maiores illo reprehenderit odio dolore.
+                            Ipsum nihil optio commodi ipsa unde provident doloremque neque, praesentium earum aliquam consectetur reiciendis veniam incidunt quas, iusto maxime itaque aut! Beatae ullam corrupti itaque voluptatum dignissimos suscipit quibusdam atque!
+                            Vitae natus eveniet excepturi animi! Nulla vel laborum quia non accusamus molestiae officia maxime odit qui eveniet sit dicta magnam deleniti quisquam, consequuntur dignissimos ea, iste nemo. Dicta, sint placeat!</p>
                         </div>
             </div>
 

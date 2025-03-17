@@ -34,7 +34,7 @@ def login():
         if password == user["password"] : 
             session_collect(user_id = user["user_id"], username = username)
             return redirect("/")
-        else: 
+        else:   
             flash("Incorrect Password !")
             return redirect("/login")
     else: 
@@ -81,12 +81,16 @@ def display_study():
 
     test = tree("test")
     test.addChildren("test","plumbus","foo","omni")
+    test.addChild("omni","man")
     test.addChild("plumbus","rick")
     test.addChild("plumbus",'morty')
     test.addChild("morty","jessica")
     test.addChild("foo","bar")
     test.addChild("foo","baz")
     test.addChildren("bar","ban")
+    test.addChild("ban","baf")
+    test.addChild("ban","tof")
+    test.addChild("tof","haj")
     test.decsribe()
     tags = {}
     db.execute("SELECT * FROM travail WHERE user_id = ? AND done = 'n'",(session["user_id"],))

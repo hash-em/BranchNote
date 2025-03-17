@@ -3,8 +3,8 @@
 function main() {
     let locations = [];
 
-    let node = document.querySelector("#tree-body")
-    let parent = document.querySelector("#tree-head")
+    let node = document.querySelector(".tree-body")
+    let parent = document.querySelector(".tree-head")
     connectChildren(node,parent)
     /*let nodes = document.querySelectorAll(".tree-node","visible");
     nodes.forEach(function(node) {
@@ -81,20 +81,24 @@ function setManySize()
         })
 }
 
-function connectChildren(node,parent){
-    children = node.querySelectorAll(".tree-node")
-    if (children)
-    {
-        for (child of children)
-        {   
-            console.log(child.parentNode.id, child.parentNode.parentNode.id)
-            //if (child.parentNode.id == parent.id)
-            connectDots(parent,child)
-            if (child.children) {connectChildren(child,child)}
+function connectChildren(node, parent) {
+    let children = node.querySelectorAll(".tree-node");
+    if (children.length > 0) {
+        for (let child of children) {
+            console.log('child : ',child.parentNode.id,'\nchild direct parent :' ,child.parentNode.parentNode.id,'\nparent argument : ', parent.id);
+            
+            if (child.parentNode.parentNode.id == parent.id) {
+                console.log(child);
+                connectDots(parent, child);
+            }
+            let grandchildren = child.parentNode.querySelector(".branch-children");
+            console.log(grandchildren)
+            if (grandchildren) {
+                connectChildren(grandchildren, child);
+            }
         }
     }
 }
-
 
 window.addEventListener('load', main);
 
