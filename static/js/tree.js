@@ -1,5 +1,5 @@
-// this is test message
-// this is master branch 100%
+// TODO : PORT svg method to a simpler HTML canvas method
+// this is a git push test
 function main() {
     let locations = [];
 
