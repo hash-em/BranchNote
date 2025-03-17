@@ -87,7 +87,6 @@ def display_study():
     test.addChild("foo","bar")
     test.addChild("foo","baz")
     test.addChildren("bar","ban")
-    test.addChild("test","final")
     test.decsribe()
     tags = {}
     db.execute("SELECT * FROM travail WHERE user_id = ? AND done = 'n'",(session["user_id"],))

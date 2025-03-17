@@ -27,16 +27,16 @@
                         </div>
                         <div class="tree-container col-md-7" style="overflow: scroll;">                  
                             <div id="tree" class="tree mt-3" style="overflow: scroll;">
-                                <div class="tree-node tree-head">
-                                    <div class="symbol">{{tree.head}} <span class="badge bg-primary">Head</span></div>
+                                <div id="tree-head" class="tree-node tree-head" children="{{tree.children}}">
+                                    <div class="symbol"">{{tree.head}} <span class="badge bg-primary">Head</span></div>
                                     <div class="description">{{ tree.description }}</div>
                                 </div>
                                 
                                 <div id="tree-body" style="z-index: 10;">
                                     {% for node in tree.children recursive %}
                                         {% if node.children %}
-                                        <div class="branch-head d-flex mx-4 mb-2" id="{{node.head}}">
-                                            <div class="tree-node" style="margin-bottom: {{ (size-1) * 30}}px;">
+                                        <div class="branch-head d-flex mx-4 mb-2" id="{{node.head}}" children="{{node.children}}">
+                                            <div class="tree-node">
                                                 <div class="symbol">{{ node.head }}
                                                     <span class="position-absolute top-50 start-0 translate-middle p-2 border border-light rounded-circle node-link">
                                                         <span class="visually-hidden">New alerts</span>
@@ -50,7 +50,7 @@
                                                 {{ loop(node.children) }}
                                             </div>
                                         {% else %}
-                                        <div class="leaf-branch d-flex mx-4 mb-2" id="{{node.head}}">
+                                        <div class="leaf-branch d-flex mx-4 mb-2" id="{{node.head}}" children="0">
                                             <div class="tree-node leaf">
                                                 <div class="symbol">{{ node.head }}
                                                     <span class="position-absolute top-50 start-0 translate-middle p-2 border border-light rounded-circle node-link">
@@ -66,7 +66,10 @@
                                     {% endfor %}
                                 </div>
                                 <!--TODO : populate node links-->
-                                <div id="node-links" class="node-links mt-3 position-absolute" style="z-index: 1;"></div>
+                                <div id="node-links" class="node-links mt-3 position-absolute" style="z-index: 1;">
+
+                                    </svg>
+                                </div>
                             <!--Tree end below-->
                             </div>
                             </div>

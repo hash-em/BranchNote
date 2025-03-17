@@ -3,42 +3,28 @@
 function main() {
     let locations = [];
 
-    let nodes = document.querySelectorAll(".tree-node","visible");
+    let node = document.querySelector("#tree-body")
+    let parent = document.querySelector("#tree-head")
+    connectChildren(node,parent)
+    /*let nodes = document.querySelectorAll(".tree-node","visible");
     nodes.forEach(function(node) {
-        locations.push(getPosition(node));
+        locations.push(node);
     });
     let location_count = locations.length;
-
-    for (let i = 0; i < location_count - 1; i++) {
-        let min = locations[i].x;
-        let min_pos = i;
-        for (let j = i + 1; j < location_count; j++) {
-            if (locations[j].x < min) {
-                min = locations[j].x;
-                min_pos = j;
-            }
-        }
-        if (min_pos != i) {
-            let temp = locations[i];
-            locations[i] = locations[min_pos];
-            locations[min_pos] = temp;
-        }
-    }
+    console.log(location_count)
     //connect head
-    let index = 1;
     let connection_count = 0;
     let current_branch = document.querySelector("#tree-body")
     console.log(current_branch.id)
-    while(index < location_count - 1)
+    for(let index = 1 ;index < location_count - 1; index++)
     {
-        if (locations[index].node.parentNode.parentNode.id == current_branch.id)
+        if (locations[index].parentNode.parentNode.id == current_branch.id)
             {
                 connectDots(locations[0],locations[index])
                 connection_count ++;
             }
-        index++;
     }
-    console.log(connection_count)
+    console.log(connection_count)*/
 
    
 }
@@ -51,48 +37,64 @@ function getPosition(el) {
 }
 
 let connections = []
-function connectDots(a, b) {
+function connectDots(dot_a, dot_b) 
+{
     // Ensure the container exists
-    console.log(a.x, a.y, a.node, b.x, b.y, b.node);
+    a = getPosition(dot_a)
+    b = getPosition(dot_b)
+    //console.log(a.x, a.y, a.node, b.x, b.y, b.node);
     // Create the line element
     let svgNS = "http://www.w3.org/2000/svg";
+    let svg = document.createElementNS(svgNS,"svg");
     let line = document.createElementNS(svgNS, "line");
-    let svg = document.createElementNS(svgNS, "svg");
     svg.appendChild(line);
-    setSize(svg)
-    connection = {'a':a,'b':b,'svg':svg}
-    console.log(connection)
-    function setSize(connection)
-    {
-        /*let svg = connection.svg;
-        let line = svg.find("line");*/
-        line.setAttribute("x1", a.x + a.node.offsetWidth);
-        line.setAttribute("y1", a.y + a.node.offsetHeight / 4.7);
-        line.setAttribute("x2", b.x);
-        line.setAttribute("y2", b.y + b.node.offsetHeight / 3.6);
-        line.setAttribute("stroke", "black");
-        line.setAttribute("stroke-width", "2");
-        svg.setAttribute("id", "node-link");
-        svg.setAttribute("viewBox", `0 0 ${window.innerWidth} ${window.innerHeight}`);
-        svg.setAttribute("width", window.innerWidth);
-        svg.setAttribute("height", window.innerHeight);
-        svg.setAttribute("style", "position:absolute; z-index: -1;");
-    }
-    document.getElementById("node-links").append(svg);
+    let connection = {'a':a,'b':b,'svg':svg};
+    document.getElementById("node-links").appendChild(svg);
     connections.push(connection)
+    setSize(connection)
     // Append to the SVG container
+    
+    //console.log(connection)
+    
+}
 
-    function setManySize()
+function setSize(connection) {
+    let line = connection.svg.querySelector("line");
+    let svg = connection.svg
+    svg.setAttribute("id", "node-link");
+    svg.setAttribute("width", window.innerWidth);
+    svg.setAttribute("height", window.innerHeight);
+    svg.setAttribute("viewBox", `0 0 ${window.innerWidth} ${window.innerHeight}`);
+    svg.setAttribute("style", "position:absolute; z-index: 10;");
+    line.setAttribute("x1", connection.a.x + connection.a.node.offsetWidth);
+    line.setAttribute("y1", connection.a.y + 16);
+    line.setAttribute("x2", connection.b.x);
+    line.setAttribute("y2", connection.b.y + 16); // 16 is the padding of 'tree-node' in the stylesheet
+    line.setAttribute("stroke", "black");
+    line.setAttribute("stroke-width", "2");
+}
+function setManySize()
+{
+    connections.forEach(function(connection)
     {
-        connections.forEach(function(connection)
+            setSize(connection)
+        })
+}
+
+function connectChildren(node,parent){
+    children = node.querySelectorAll(".tree-node")
+    if (children)
     {
-        setSize(connection)
-    })
+        for (child of children)
+        {   
+            console.log(child.parentNode.id, child.parentNode.parentNode.id)
+            //if (child.parentNode.id == parent.id)
+            connectDots(parent,child)
+            if (child.children) {connectChildren(child,child)}
+        }
     }
 }
 
 
 window.addEventListener('load', main);
-window.addEventListener('resize', setSizes);
-
 

@@ -144,7 +144,11 @@ button.btn:hover {
 
 }
 
-
+.node-links {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
 .node-link
 {
     transition: 0.2s;
