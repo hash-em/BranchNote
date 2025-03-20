@@ -4,7 +4,7 @@ from db import conn_params,password_hash,login_required,session_collect,db,conne
 from markdown import markdown
 from helpers import extract_tags
 from tree import tree
-# FLASK INTIALISATION
+# FLASK #INTIALISATION
 app = Flask(__name__)
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
@@ -12,9 +12,8 @@ Session(app)
 # SQL CONNECTION
 
 
-# Establish a connection
 
-# sql : 31hell07gh
+# Establish a connection&
 
 @app.route("/")
 @login_required
@@ -31,13 +30,13 @@ def login():
     db.execute("SELECT user_id,hash password FROM users WHERE username = ?", (username,))
     user = db.fetchone()
     if (user):
-        if password == user["password"] : 
+        if password == user["password"] :
             session_collect(user_id = user["user_id"], username = username)
             return redirect("/")
-        else:   
+        else:
             flash("Incorrect Password !")
             return redirect("/login")
-    else: 
+    else:
         flash("Please register to use that username !")
         session["username"] = username
         return redirect("/register")
@@ -56,7 +55,7 @@ def register():
     db.execute("SELECT username FROM users WHERE username = ?",(username,))
 
     already_exists = db.fetchone()
-    if (already_exists): 
+    if (already_exists):
         flash(f"Username '{already_exists["username"]}' already in use")
         return redirect("/register")
     else :
@@ -68,7 +67,7 @@ def register():
         return redirect("/")
 
 @app.get("/logout")
-def logout(): 
+def logout():
     session.clear()
     return redirect("/")
 
@@ -88,9 +87,7 @@ def display_study():
     test.addChild("foo","bar")
     test.addChild("foo","baz")
     test.addChildren("bar","ban")
-    test.addChild("ban","baf")
-    test.addChild("ban","tof")
-    test.addChild("tof","haj")
+
     test.decsribe()
     tags = {}
     db.execute("SELECT * FROM travail WHERE user_id = ? AND done = 'n'",(session["user_id"],))
@@ -99,7 +96,7 @@ def display_study():
     todo = ["this",'that',"those"]
     if request.method == "GET":
         return render_template("study.html",todo = todo, tags = tags,tree = test)
-    else: 
+    else:
         query = request.form.get("query")
         try :
             with open(f"exercices/{query}.md","r") as file:
@@ -108,10 +105,10 @@ def display_study():
                 exercice = markdown(exercice)
 
             return render_template("study.html", todo=todo, exercice = exercice, tags = tags , name = query, tree=test)
-        except : 
+        except :
             flash("couldn't find")
             return redirect("/study")
-        
+
 
 
 @app.errorhandler(404)

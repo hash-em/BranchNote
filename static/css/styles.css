@@ -69,6 +69,7 @@ button.btn:hover {
 .tree-container {
     position: relative;
     display: grid;
+    align-items: center;
 }
 
 .tree {
@@ -76,9 +77,11 @@ button.btn:hover {
     display: inline-flex;
     gap: 1rem;
     overflow: hidden;
+    align-items: center;
 }
 
-.tree-node,.leaf {
+.tree-node,
+.leaf {
     background-color: #ffffff;
     border: 1px solid #dee2e6;
     border-radius: 0.25rem;
@@ -89,7 +92,10 @@ button.btn:hover {
     text-align: center;
     position: relative;
 }
-.leaf {margin-bottom: 20px;}
+
+.leaf {
+    margin-bottom: 20px;
+}
 
 .tree .symbol {
     font-size: 1rem;
@@ -112,13 +118,14 @@ button.btn:hover {
     padding-left: 20px;
 }
 
-.branch > .tree-node {
+.branch>.tree-node {
     display: inline-block;
 }
 
-.branch > * {
+.branch>* {
     display: inline;
 }
+
 .branch-head {
     display: inline-flex;
 }
@@ -132,7 +139,7 @@ button.btn:hover {
 /* ADD media to fix the ratios and whatnot */
 .tree-menu {
     position: relative;
-    transform: translate(5%,2%);
+    transform: translate(5%, 2%);
     justify-content: center;
     align-content: center;
     margin-left: -20px;
@@ -149,11 +156,12 @@ button.btn:hover {
     height: 100%;
     overflow: visible;
 }
-.node-link
-{
+
+.node-link {
     transition: 0.2s;
     background-color: #6c757d;
 }
+
 .node-link:hover {
     background-color: #0056b3;
 }
