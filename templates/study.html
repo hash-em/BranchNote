@@ -14,22 +14,6 @@
                     {% if tree %}
                     {% set size = tree.maxDepth(starting_level=1) %}
                     <script src="/static/js/tree.js"></script>
-                    <div class="tree-menu col-md-2">
-                        <button class="btn btn-lg btn-block mx-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                class="bi bi-arrow-left" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd"
-                                    d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
-                            </svg>
-                        </button>
-                        <button class="btn btn-lg btn-block mx-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                class="bi bi-arrow-right" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd"
-                                    d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8" />
-                            </svg>
-                        </button>
-                    </div>
                     <div class="tree-container col-md-7" style="overflow: scroll;">
                         <div id="{{ tree.head }}" class="tree mt-3" style="overflow: scroll;">
                             <div id="{{ tree.head }}" class="tree-node visible-node tree-head"
@@ -37,7 +21,6 @@
                                 <div class="symbol"">{{tree.head}} <span class=" badge bg-primary">Head</span></div>
                                 <div class="description">{{ tree.description }}</div>
                             </div>
-
                             <div id="{{tree.head}}" class="tree-body branch-children" style="z-index: 10;">
                                 {% for node in tree.children recursive %}
                                 {% if node.children %}
@@ -58,7 +41,7 @@
                                         {{ loop(node.children) }}
                                     </div>
                                     {% else %}
-                                    <div class="leaf-branch d-flex mx-4 mb-2" id="{{node.head}}" children="0">
+                                    <div class="branch-head d-flex mx-4 mb-2" id="{{node.head}}" children="0">
                                         <div class="tree-node visible-node leaf">
                                             <div class="symbol">{{ node.head }}
                                                 <span
@@ -122,6 +105,9 @@
         </main>
         <aside class="col-md-1 bg-light border-left" id="todo-aside">
             <h5>Todos</h5>
+            <button onclick="showAll()">
+                foo
+            </button>
             <!-- Add todo items here -->
             <ul>
                 {% for task in todo %}

@@ -69,16 +69,17 @@ button.btn:hover {
 .tree-container {
     position: relative;
     display: grid;
-    align-items: center;
 }
 
 .tree {
     position: relative;
-    display: inline-flex;
+    display: flex;
     gap: 1rem;
-    overflow: hidden;
     align-items: center;
+    overflow: hidden;
 }
+
+
 
 .tree-node,
 .leaf {
@@ -131,30 +132,23 @@ button.btn:hover {
 }
 
 .tree-head {
-    align-self: center;
-    justify-self: center;
     margin-right: 80px;
-}
-
-/* ADD media to fix the ratios and whatnot */
-.tree-menu {
-    position: relative;
-    transform: translate(5%, 2%);
-    justify-content: center;
-    align-content: center;
-    margin-left: -20px;
+    top: -3%;
 }
 
 
-.tree-menu button {
-    width: 40%;
 
-}
+
 
 .node-links {
     width: 100%;
     height: 100%;
     overflow: visible;
+    pointer-events: none;
+}
+
+.branch-head {
+    align-self: center;
 }
 
 .node-link {

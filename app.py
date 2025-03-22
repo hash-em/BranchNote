@@ -12,7 +12,6 @@ Session(app)
 # SQL CONNECTION
 
 
-
 # Establish a connection&
 
 @app.route("/")
@@ -73,21 +72,17 @@ def logout():
 
 
 
-
 @app.route("/study", methods=["GET","POST"])
 @login_required
 def display_study():
 
     test = tree("test")
-    test.addChildren("test","plumbus","foo","omni")
-    test.addChild("omni","man")
+    test.addChildren("test","plumbus","omni")
+    test.addChildren("omni","man","woman")
     test.addChild("plumbus","rick")
     test.addChild("plumbus",'morty')
     test.addChild("morty","jessica")
-    test.addChild("foo","bar")
-    test.addChild("foo","baz")
-    test.addChildren("bar","ban")
-
+    test.addChildren("man","child","female")
     test.decsribe()
     tags = {}
     db.execute("SELECT * FROM travail WHERE user_id = ? AND done = 'n'",(session["user_id"],))

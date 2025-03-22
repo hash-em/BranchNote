@@ -8,11 +8,11 @@ class tree():
 
     def addChild(self,head,child,node = None):
         """
-        this code does not handle edge case where you provide an invalid head 
+        this code does not handle edge case where you provide an invalid head
         if in doubt please use the describe method to know where is possible to insert !
 
         #### Usage :
-        head : name of the branch head \n 
+        head : name of the branch head \n
         e.g : to add a branch called bar to a branch called foo use addChild(foo,bar)
 
         """
@@ -23,7 +23,7 @@ class tree():
             for subnode in node.children:
                 if subnode is not None:
                     self.addChild(head,child,subnode)
-        
+
     def decsribe(self,node=None,previous=""):
         if node is None:
             node = self
@@ -38,7 +38,7 @@ class tree():
     def addChildren(self,head,*children):
         """
         Include head of the branch as first argument
-        And 
+        And
         """
         for child in children:
             self.addChild(head,child)
