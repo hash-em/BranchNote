@@ -3,7 +3,9 @@ body {
     background-color: #f0f2f5;
 }
 
-#markdown-display {
+.container,
+.descriptionBox {
+    position: relative;
     overflow: scroll !important;
     height: 70vh;
     background-color: #ffffff;
@@ -11,8 +13,19 @@ body {
     border-radius: 0.25rem;
     padding: 1rem;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    overflow-y: auto;
+    /*overflow-y: auto;*/
+    overflow: hidden !important;
+    display: grid;
 }
+
+.container {
+    justify-items: center;
+}
+
+#graph-display {
+    align-self: center;
+}
+
 
 .menu {
     background-color: #ffffff;
@@ -67,8 +80,12 @@ button.btn:hover {
 }
 
 .tree-container {
-    position: relative;
+    align-content: center;
+    align-items: center;
     display: grid;
+    width: 100%;
+    height: 100%;
+    overflow: hidden !important;
 }
 
 .tree {
@@ -76,7 +93,7 @@ button.btn:hover {
     display: flex;
     gap: 1rem;
     align-items: center;
-    overflow: hidden;
+    overflow: visible;
 }
 
 
@@ -92,6 +109,7 @@ button.btn:hover {
     height: 60px;
     text-align: center;
     position: relative;
+    transition: 0.3s;
 }
 
 .leaf {
@@ -107,6 +125,10 @@ button.btn:hover {
 .tree-node .description {
     font-size: 1rem;
     color: #6c757d;
+}
+
+.tree-node:hover {
+    color: #0056b3;
 }
 
 .branch {
@@ -155,6 +177,7 @@ button.btn:hover {
     transition: 0.2s;
     background-color: #6c757d;
 }
+
 
 .node-link:hover {
     background-color: #0056b3;

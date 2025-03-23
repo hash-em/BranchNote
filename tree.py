@@ -28,10 +28,11 @@ class tree():
         if node is None:
             node = self
         if node.children:
-            if node.head != previous : print(node.head, end=": ")
+            if node.head != previous :
+                print(node.head,node.details,node.verbose, end=": ")
             else : print(end=": ")
             for child in node.children:
-                print(child.head, end="  ")
+                print(child.head,child.details,child.verbose, end="  ")
                 self.decsribe(child,child.head)
             print()
 
@@ -44,6 +45,7 @@ class tree():
             self.addChild(head,child)
             #if child.children : self.addChildren(child.head,child.children) for recusivity maybe
     def maxDepth(self,max_depth=0,node=None,current_level=0,starting_level=0):
+
         """
         Returns the maximum amount of children a node has within the tree
         specify starting_branch to exlude branch depths before it
@@ -59,12 +61,29 @@ class tree():
                 if current_max_depth >= max_depth : return current_max_depth
         else:
             return max_depth
+
+    def addDetails(self,head,details,verbose,node=None):
+        if node == None:
+            node = self
+        if node.head == head :
+            node.details = details
+            node.verbose = verbose
+        else :
+            for child in node.children:
+                if child.head == head:
+                    child.details = details
+                    child.verbose = verbose
+                elif child.children :
+                    self.addDetails(head,details,verbose,child)
+
 def test():
     a = tree("e")
     a.addChildren("e","question","trippy")
+    a.addDetails("e","this e","therefor it may be called e")
     a.addChild("e","answer")
     a.addChildren("question","e^x")
     a.addChildren("e^x","x")
     a.addChildren("answer","hello","this is answer")
+    a.addDetails("this is answer","you can say","but you can't")
     a.decsribe()
     print(a.maxDepth(starting_level=1))

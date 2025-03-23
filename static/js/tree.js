@@ -25,7 +25,7 @@ function connectDots(dot_a, dot_b) {
     let svg = document.createElementNS(svgNS, "svg");
     let line = document.createElementNS(svgNS, "line");
     svg.appendChild(line);
-    let connection = { 'parent': dot_a, 'child': dot_b, 'svg': svg, 'expanded': true };
+    let connection = { 'parent': dot_a, 'child': dot_b, 'svg': svg };
     document.getElementById("node-links").appendChild(svg);
     connections.push(connection)
     setSize(connection)
@@ -33,22 +33,22 @@ function connectDots(dot_a, dot_b) {
 
 
 }
-
 function setSize(connection) {
+    let container = document.querySelector("#graph-display")
 
     a = getPosition(connection.parent)
     b = getPosition(connection.child)
     let line = connection.svg.querySelector("line");
     let svg = connection.svg
     svg.setAttribute("id", "node-link");
-    svg.setAttribute("width", window.innerWidth);
-    svg.setAttribute("height", window.innerHeight);
-    svg.setAttribute("viewBox", `0 0 ${window.innerWidth} ${window.innerHeight}`);
+    svg.setAttribute("width", container.offsetWidth); /// use window.innerHeight and width to avoid svg not rendering
+    svg.setAttribute("height", window.innerHeight + 50); /// use container.offsetHeight and width for nice sizing and no overflow
+    svg.setAttribute("viewBox", `0 0 ${container.innerWidth} ${container.innerHeight}`);
     svg.setAttribute("style", "position:absolute; z-index: 10;");
-    line.setAttribute("x1", a.x + a.node.offsetWidth);
-    line.setAttribute("y1", a.y + 22);
-    line.setAttribute("x2", b.x);
-    line.setAttribute("y2", b.y + 22); // 16 is the padding of 'tree-node' in the stylesheet
+    line.setAttribute("x1", (a.x + a.node.offsetWidth));
+    line.setAttribute("y1", (a.y + 22));
+    line.setAttribute("x2", (b.x));
+    line.setAttribute("y2", (b.y + 22)); // 16 is the padding of 'tree-node' in the stylesheet
     line.setAttribute("stroke", "black");
     line.setAttribute("stroke-width", "2");
 }
@@ -83,14 +83,14 @@ let visible_connections = connections
 
 
 function toggle(node) {
-    let child_connection = connections.find((connection) => connection.child == node)
     let parent_connection = connections.find((connection) => connection.parent == node)
-    if (child_connection.expanded == true) {
-        focusOn(node)
-    }
-    if (parent_connection != undefined && parent_connection.expanded == true) {
+
+    focusOn(node)
+
+    if (parent_connection != undefined) {
         showAll(node)
     }
+    showDescription(node)
     setManySize()
 }
 
@@ -99,8 +99,6 @@ function focusOn(node) {
     if (!(node_div == document.querySelector(".tree"))) {
         child_connection = visible_connections.find((connection) => connection.child == node)
         if (child_connection != undefined) {
-            child_connection.expanded = false;
-            console.log(child_connection)
         }
 
         parent_node = node_div.parentNode.parentNode
@@ -123,16 +121,14 @@ function focusOn(node) {
 }
 
 function showAll(node) {
-    console.log("showing")
     connections.forEach(function (connection) {
         if (connection.parent == node) {
-            connection.expanded = true;
             connection.child.parentNode.setAttribute("style", "display :");
             connection.child.classList.add("visible-node");
             connection.svg.setAttribute("display", "display");
             connections.forEach(function (subconnection) {
                 if (subconnection.parent == connection.child) {
-                    subconnection.expanded = true;
+                    // if you remove this you can 'customize' the layout by clicking
                     showAll(connection.child);
                 }
             })
@@ -141,6 +137,11 @@ function showAll(node) {
     setManySize()
 }
 
+function showDescription(node) {
+    let descriptionBox = document.querySelector(".descriptionBox")
+    console.log(node.getAttribute("verbose"))
+    descriptionBox.innerHTML = node.getAttribute("verbose")
 
+}
 window.addEventListener('resize', setManySize)
 window.addEventListener('load', main);
