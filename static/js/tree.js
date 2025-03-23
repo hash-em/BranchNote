@@ -5,7 +5,7 @@
 function main() {
 
     let tree_head = document.querySelector(".tree-head")
-    tree_head.addEventListener("click", () => showAll(tree_head), console.log("in"))
+    tree_head.addEventListener("click", () => toggle(tree_head))
     let node = document.querySelector(".tree-body")
     connectChildren(tree_head, node)
 }
