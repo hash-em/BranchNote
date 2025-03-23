@@ -78,10 +78,8 @@ def display_study():
 
     test = tree("final")
     test.addDetails("final","somee details","some verbose details about the tree")
-    test.addChildren("final","plumbus","omni","test")
-    test.addChildren("omni","man","woman")
-    test.addChildren("test","many","multiple")
-    test.addChild("plumbus","rick")
+    test.addChildren("final","plumbus","omni","foo")
+    test.addChildren("omni","man")
     test.addChild("plumbus",'morty')
     test.addChild("morty","jessica")
     test.addChild("jessica","friend")

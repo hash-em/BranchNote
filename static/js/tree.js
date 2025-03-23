@@ -5,7 +5,7 @@
 function main() {
 
     let tree_head = document.querySelector(".tree-head")
-    tree_head.addEventListener("click", () => showAll(tree_head))
+    tree_head.addEventListener("click", () => showAll(tree_head), console.log("in"))
     let node = document.querySelector(".tree-body")
     connectChildren(tree_head, node)
 }
@@ -34,16 +34,15 @@ function connectDots(dot_a, dot_b) {
 
 }
 function setSize(connection) {
-    let container = document.querySelector("#graph-display")
+    let container = document.querySelector(".graph-display")
 
     a = getPosition(connection.parent)
     b = getPosition(connection.child)
     let line = connection.svg.querySelector("line");
     let svg = connection.svg
     svg.setAttribute("id", "node-link");
-    svg.setAttribute("width", container.offsetWidth); /// use window.innerHeight and width to avoid svg not rendering
-    svg.setAttribute("height", window.innerHeight + 50); /// use container.offsetHeight and width for nice sizing and no overflow
-    svg.setAttribute("viewBox", `0 0 ${container.innerWidth} ${container.innerHeight}`);
+    svg.setAttribute("width", window.innerHeight); /// use window.innerHeight and width to avoid svg not rendering
+    svg.setAttribute("height", window.innerHeight); /// use container.offsetHeight and width for nice sizing and no overflow
     svg.setAttribute("style", "position:absolute; z-index: 10;");
     line.setAttribute("x1", (a.x + a.node.offsetWidth));
     line.setAttribute("y1", (a.y + 22));
