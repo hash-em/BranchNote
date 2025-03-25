@@ -111,6 +111,13 @@ def display_study():
             return redirect("/study")
 
 
+@app.get("/create")
+def create():
+# try to include a way to save progress in session somehow
+    return render_template("create.html")
+
+
+
 
 @app.errorhandler(404)
 def not_found(e):

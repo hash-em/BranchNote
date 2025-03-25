@@ -1,9 +1,10 @@
 {% extends "layout.html" %}
-
+{% block title %} - Notes{% endblock %}
 {% block main %}
+
 <div class="container-fluid">
     <div class="row">
-        <main class="col-md-7 container graph-display px-3 py-0">
+        <main class="col-md-8 container graph-display px-3 py-0">
             <!-- Markdown content will be displayed here -->
             <!-- Basic tree search  -->
             {% if tree %}
@@ -70,17 +71,17 @@
         <div class="col-md-4 descriptionBox">
             {{tree.verbose}}
         </div>
-        <aside class="col-md-1 bg-light border-left" id="todo-aside">
-            <h5>Todos</h5>
-
-            <!-- Add todo items here -->
-            <ul>
-                {% for task in todo %}
-                <li>{{task}}</li>
-                {% endfor %}
-            </ul>
-        </aside>
 
     </div>
+    <aside class="col-md-1 bg-light border-left" id="todo-aside">
+        <h5>Todos</h5>
+
+        <!-- Add todo items here -->
+        <ul>
+            {% for task in todo %}
+            <li>{{task}}</li>
+            {% endfor %}
+        </ul>
+    </aside>
 </div>
 {% endblock %}

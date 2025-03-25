@@ -2,7 +2,7 @@
 // this is a git push test
 
 
-function main() {
+function visualize() {
 
     let tree_head = document.querySelector(".tree-head")
     tree_head.addEventListener("click", () => toggle(tree_head))
@@ -60,6 +60,7 @@ function setManySize() {
             connection.svg.setAttribute("display", "none")
         }
     })
+    console.log(connections)
 }
 
 function connectChildren(parent, node) {
@@ -142,5 +143,19 @@ function showDescription(node) {
     descriptionBox.innerHTML = node.getAttribute("verbose")
 
 }
-window.addEventListener('resize', setManySize)
-window.addEventListener('load', main);
+
+
+//
+function create() {
+    console.log("hi")
+}
+console.log(document.title)
+if (document.title == "BranchNote - Notes") {
+    window.addEventListener('resize', setManySize);
+    window.addEventListener('load', visualize);
+}
+
+else if (document.title == "BranchNote - Create") {
+    window.addEventListener('load', create)
+    window.addEventListener('resize', setManySize);
+}
