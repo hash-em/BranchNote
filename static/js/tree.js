@@ -122,17 +122,19 @@ function focusOn(node) {
 }
 
 function showAll(node) {
-    console.log("showing")
     connections.forEach(function (connection) {
         if (connection.parent == node) {
             connection.child.parentNode.setAttribute("style", "display :");
             connection.child.classList.add("visible-node");
-            connection.svg.setAttribute("display", "display");
-            connections.forEach(function (subconnection) {
-                if (subconnection.parent == connection.child) {
-                    showAll(connection.child);
-                }
-            })
+            let subconnections = connection.parent.parentNode.querySelector(".branch-children").querySelectorAll(".tree-node")
+            console.log(subconnections)
+            if (subconnections != null) {
+                subconnections.forEach(function (subconnection) {
+                    subconnection.setAttribute("style", "display:")
+                    subconnection.classList.add("visible-node")
+                })
+            }
+
         }
     })
 }
