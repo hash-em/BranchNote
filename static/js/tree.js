@@ -32,29 +32,50 @@ function setSize(connection) {
     let b = getPosition(connection.child);
 
     ctx.beginPath();
-    ctx.moveTo(a.x + a.node.offsetWidth, a.y + 16); // Center the line on the node
-    ctx.lineTo(b.x, b.y + 16); // Center the line on the node
+    ctx.moveTo(a.x + a.node.offsetWidth, a.y + 16); // Adjust for node dimensions
+    ctx.lineTo(b.x, b.y + 16); // Adjust for node dimensions
     ctx.strokeStyle = "black";
     ctx.lineWidth = 2;
     ctx.stroke();
 }
 
-function setManySize() {
-    let container = document.querySelector(".graph-display");
+function setMaxCanvasSize() {
     let canvas = document.getElementById("node-links");
-    canvas.width = container.offsetWidth; // Match canvas size to container
-    canvas.height = container.offsetHeight; // Match canvas size to container
-    let ctx = canvas.getContext("2d");
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    let maxWidth = 0;
+    let maxHeight = 0;
 
+    // Calculate the maximum dimensions required to contain all connections
+    connections.forEach(function (connection) {
+        let a = getPosition(connection.parent);
+        let b = getPosition(connection.child);
+
+        maxWidth = Math.max(maxWidth, a.x + a.node.offsetWidth, b.x);
+        maxHeight = Math.max(maxHeight, a.y + 16, b.y + 16);
+    });
+
+    // Set canvas size to the maximum dimensions
+    canvas.width = maxWidth;
+    canvas.height = maxHeight;
+}
+
+function setManySize() {
+    let canvas = document.getElementById("node-links");
+    let ctx = canvas.getContext("2d");
+
+    // Set the canvas to the maximum size required
+    setMaxCanvasSize();
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
+
+    // Draw all connections
     connections.forEach(function (connection) {
         if (connection.child.classList.contains("visible-node")) {
             setSize(connection);
         }
     });
-    console.log(connections);
 }
 
+document.querySelector(".graph-display").addEventListener("scroll", setManySize)
 function connectChildren(parent, node) {
     let children = node.querySelectorAll(".tree-node");
     if (children.length > 0) {
@@ -70,7 +91,6 @@ function connectChildren(parent, node) {
         }
     }
 }
-let visible_connections = connections
 
 function toggle(node) {
     focusOn(node)
@@ -85,7 +105,7 @@ function toggle(node) {
 function focusOn(node) {
     node_div = node.parentNode
     if (!(node_div == document.querySelector(".tree"))) {
-        child_connection = visible_connections.find((connection) => connection.child == node)
+        child_connection = connections.find((connection) => connection.child == node)
         if (child_connection != undefined) {
         }
 
@@ -103,9 +123,6 @@ function focusOn(node) {
         focusOn(next)
 
     }
-
-    visible_connections = visible_connections.filter((connection) => connection.child.classList.contains("visible-node"))
-    setManySize()
 }
 
 function showAll(node) {
@@ -120,7 +137,6 @@ function showAll(node) {
             })
         }
     })
-    setManySize()
 }
 
 function showDescription(node) {

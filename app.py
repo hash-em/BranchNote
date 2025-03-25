@@ -87,6 +87,7 @@ def display_study():
     test.addChild("friend","of a friend")
     test.addChildren("man","child","female")
     test.addDetails("of a friend","he is nice","kind of nice")
+    test.addChild("of a friend","grand")
     test.addDetails("man","<p>he is the son of god</p>","<h1>he is a creation</h1><p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore, modi repudiandae. Nulla tempore suscipit fuga, a, nam voluptates mollitia, est excepturi possimus animi accusamus impedit minima rerum incidunt voluptatum eos.Saepe, assumenda excepturi. Distinctio in optio facere itaque, nobis dicta aliquam animi. Cumque libero hic sapiente quod? Beatae cumque veniam magni ipsam consequuntur sit eius libero voluptate! Recusandae, repellendus facere?Harum quod excepturi quae modi, rem commodi debitis voluptate. Voluptatem blanditiis ducimus, ipsum est vero ea dolor ad voluptas molestias corporis doloribus minima sit consectetur, ut fugit veniam iure facere!you know..</p><h2>FROM GOD</h2>")
     test.decsribe()
     tags = {}
