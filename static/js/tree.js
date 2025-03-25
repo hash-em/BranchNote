@@ -112,11 +112,15 @@ function showAll(node) {
         if (connection.parent == node) {
             connection.child.parentNode.setAttribute("style", "display :");
             connection.child.classList.add("visible-node");
-            connections.forEach(function (subconnection) {
-                if (subconnection.parent == connection.child) {
-                    showAll(connection.child);
-                }
-            })
+            let subconnections = connection.parent.parentNode.querySelector(".branch-children").querySelectorAll(".tree-node")
+            console.log(subconnections)
+            if (subconnections != null) {
+                subconnections.forEach(function (subconnection) {
+                    subconnection.setAttribute("style", "display:")
+                    subconnection.classList.add("visible-node")
+                })
+            }
+
         }
     })
 }
