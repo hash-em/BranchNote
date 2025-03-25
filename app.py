@@ -95,7 +95,7 @@ def display_study():
     # TODO remove this
     todo = ["this",'that',"those"]
     if request.method == "GET":
-        return render_template("study.html",todo = todo, tags = tags,tree = test)
+        return render_template("study.html",todo = todo, depth = test.maxDepth(),tree = test)
     else:
         query = request.form.get("query")
         try :

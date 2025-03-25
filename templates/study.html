@@ -1,107 +1,83 @@
+// master canvas
 {% extends "layout.html" %}
-
+{% block title %} - Notes{% endblock %}
 {% block main %}
+
 <div class="container-fluid">
     <div class="row">
-        <main class="col-md-11 container">
+        <main class="col-md-8 container graph-display px-3 py-0">
+            <!-- Markdown content will be displayed here -->
+            <!-- Basic tree search  -->
+            {% if tree %}
+            {% set size = tree.maxDepth(starting_level=1) %}
+            <script src="/static/js/tree.js"></script>
+            <div id="{{ tree.head }}" class="tree mt-3">
+                <div id="{{ tree.head }}" class="tree-node visible-node tree-head"
+                    verbose="{% if tree.verbose %}{{ tree.verbose }}{% endif %}" details="{{ tree.details}}"
+                    style="top: -{{ depth*15.5 }}px;">
 
-            <div id="markdown-display" style="overflow: scroll;" class="p-3 container">
-                <div class="row">
-                    <!-- Markdown content will be displayed here -->
-                    <!-- Basic tree search  -->
-                    <h4>{{ name | default("Chapters")}}</h4>
-                    <hr>
-                    {% if tree %}
-                    {% set size = tree.maxDepth(starting_level=1) %}
-                    <script src="/static/js/tree.js"></script>
-                    <div class="tree-container col-md-7" style="overflow: scroll;">
-                        <div id="{{ tree.head }}" class="tree mt-3" style="overflow: scroll;">
-                            <div id="{{ tree.head }}" class="tree-node visible-node tree-head"
-                                children="{{tree.children}}">
-                                <div class="symbol"">{{tree.head}} <span class=" badge bg-primary">Head</span></div>
-                                <div class="description">{{ tree.description }}</div>
-                            </div>
-                            <div id="{{tree.head}}" class="tree-body branch-children" style="z-index: 10;">
-                                {% for node in tree.children recursive %}
-                                {% if node.children %}
-                                <div class="branch-head d-flex mx-4 mb-2" id="{{node.head}}"
-                                    children="{{node.children}}">
-                                    <div class="tree-node visible-node" id="{{node.head}}">
-                                        <div class="symbol">{{ node.head }}
-                                            <span
-                                                class="position-absolute top-50 start-0 translate-middle p-2 border border-light rounded-circle node-link">
-                                                <span class="visually-hidden">New alerts</span>
-                                            </span>
-
-                                        </div>
-                                        <div class="description">{{ node.description }}</div>
-                                    </div>
-                                    <!--Create children recursively by jumping back to the loop with the child as 'tree' (jinja does the work just explaining)-->
-                                    <div id="{{ node.head }}" class="branch-children ">
-                                        {{ loop(node.children) }}
-                                    </div>
-                                    {% else %}
-                                    <div class="branch-head d-flex mx-4 mb-2" id="{{node.head}}" children="0">
-                                        <div class="tree-node visible-node leaf">
-                                            <div class="symbol">{{ node.head }}
-                                                <span
-                                                    class="position-absolute top-50 start-0 translate-middle p-2 border border-light rounded-circle node-link">
-                                                    <span class="visually-hidden">New alerts</span>
-                                                </span>
-
-                                            </div>
-                                            <div class="description">{{ node.description }}</div>
-                                            <div class="verbose">
-                                                {% if node.verbose %}
-                                                {{ node.verbose }}
-                                                {% endif %}
-                                            </div>
-                                        </div>
-
-                                        {% endif %}
-                                    </div>
-                                    {% endfor %}
-                                </div>
-                                <!--TODO : populate node links-->
-                                <div id="node-links" class="node-links mt-3 position-absolute" style="z-index: 1;">
-
-                                    </svg>
-                                </div>
-                                <!--Tree end below-->
-                            </div>
-                        </div>
-                        {% endif %}
-
-
-                        <div class="col-md-3">
-                            <h1>test</h1>
-                            {% if exercice %}
-                            {{ exercice | safe }}
-                            {% endif %}
-                            <h3>Explication</h3>
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores saepe delectus minus,
-                                cumque voluptate harum deleniti vitae dignissimos ad possimus unde beatae eveniet et
-                                voluptatum maiores illo reprehenderit odio dolore.
-                                Ipsum nihil optio commodi ipsa unde provident doloremque neque, praesentium earum
-                                aliquam consectetur reiciendis veniam incidunt quas, iusto maxime itaque aut! Beatae
-                                ullam corrupti itaque voluptatum dignissimos suscipit quibusdam atque!
-                                Vitae natus eveniet excepturi animi! Nulla vel laborum quia non accusamus molestiae
-                                officia maxime odit qui eveniet sit dicta magnam deleniti quisquam, consequuntur
-                                dignissimos ea, iste nemo. Dicta, sint placeat!</p>
-                        </div>
-                    </div>
-
+                    <div class="symbol">{{tree.head}} <span class="badge bg-primary">Head</span></div>
+                    <div class="details">{{ tree.details }}</div>
                 </div>
+                <div id="{{tree.head}}" class="tree-body branch-children" style="z-index: 10;">
+                    {% for node in tree.children recursive %}
+                    {% if node.children %}
+                    <div class="branch-head d-flex mx-4 mb-2" id="{{node.head}}">
+                        <div class="tree-node visible-node" id="{{node.head}}"
+                            verbose="{% if node.verbose %}{{ node.verbose }}{% endif %}" details="{{ node.details}}">
+                            <div class="symbol">{{ node.head }}
+                                <span
+                                    class="position-absolute top-50 start-0 translate-middle p-2 border border-light rounded-circle node-link">
+                                    <span class="visually-hidden">New alerts</span>
+                                </span>
 
-            </div>
-            <!-- Add menu items here -->
+                            </div>
+                            <div class="details">{{ node.details | safe }}</div>
+                        </div>
+                        <!--Create children recursively by jumping back to the loop with the child as 'tree' (jinja does the work just explaining)-->
+                        <div id="{{ node.head }}" class="branch-children ">
+                            {{ loop(node.children) }}
+                        </div>
+                        {% else %}
+                        <div class="branch-head d-flex mx-4 mb-2" id="{{node.head}}">
+                            <div class="tree-node visible-node leaf"
+                                verbose="{% if node.verbose %}{{ node.verbose }}{% endif %}"
+                                details="{{ node.details}}">
+                                <div class="symbol">{{ node.head }}
+                                    <span
+                                        class="position-absolute top-50 start-0 translate-middle p-2 border border-light rounded-circle node-link">
+                                        <span class="visually-hidden">New alerts</span>
+                                    </span>
+
+                                </div>
+                                <div class="details">{{ node.details }}</div>
+                            </div>
+
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <!--TODO : populate node links-->
+                    <div id="node-links" class="node-links mt-3 position-absolute" style="z-index: 1;">
+
+                    </div>
+                </div>
+                <!--Tree end below-->
+                {% endif %}
+
+
+
+                <!-- Add menu items here -->
+
         </main>
+        <div class="col-md-4 descriptionBox">
+            {{tree.verbose}}
+        </div>
+
     </div>
     <aside class="col-md-1 bg-light border-left" id="todo-aside">
         <h5>Todos</h5>
-        <button onclick="showAll()">
-            foo
-        </button>
+
         <!-- Add todo items here -->
         <ul>
             {% for task in todo %}
@@ -109,7 +85,5 @@
             {% endfor %}
         </ul>
     </aside>
-
-</div>
 </div>
 {% endblock %}

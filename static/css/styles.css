@@ -76,7 +76,7 @@ button.btn:hover {
     display: flex;
     gap: 1rem;
     align-items: center;
-    overflow: hidden;
+    overflow: scroll;
 }
 
 
