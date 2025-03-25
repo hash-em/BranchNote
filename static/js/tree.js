@@ -25,56 +25,38 @@ function connectDots(dot_a, dot_b) {
 }
 
 function setSize(connection) {
+    let container = document.querySelector(".graph-display"); // Get the scrolling container
     let canvas = document.getElementById("node-links");
     let ctx = canvas.getContext("2d");
+
+    let scrollX = container.scrollLeft; // Correctly get horizontal scroll offset
+    let scrollY = container.scrollTop;  // Correctly get vertical scroll offset
 
     let a = getPosition(connection.parent);
     let b = getPosition(connection.child);
 
     ctx.beginPath();
-    ctx.moveTo(a.x + a.node.offsetWidth, a.y + 16); // Adjust for node dimensions
-    ctx.lineTo(b.x, b.y + 16); // Adjust for node dimensions
+    ctx.moveTo(a.x + a.node.offsetWidth + scrollX, a.y + 16 + scrollY); // Adjust for scroll
+    ctx.lineTo(b.x + scrollX, b.y + 16 + scrollY); // Adjust for scroll
     ctx.strokeStyle = "black";
     ctx.lineWidth = 2;
     ctx.stroke();
 }
 
-function setMaxCanvasSize() {
-    let canvas = document.getElementById("node-links");
-    let maxWidth = 0;
-    let maxHeight = 0;
-
-    // Calculate the maximum dimensions required to contain all connections
-    connections.forEach(function (connection) {
-        let a = getPosition(connection.parent);
-        let b = getPosition(connection.child);
-
-        maxWidth = Math.max(maxWidth, a.x + a.node.offsetWidth, b.x);
-        maxHeight = Math.max(maxHeight, a.y + 16, b.y + 16);
-    });
-
-    // Set canvas size to the maximum dimensions
-    canvas.width = maxWidth;
-    canvas.height = maxHeight;
-}
-
 function setManySize() {
+    let container = document.querySelector(".graph-display");
     let canvas = document.getElementById("node-links");
+    canvas.width = container.offsetWidth; // Match canvas size to container
+    canvas.height = container.offsetHeight; // Match canvas size to container
     let ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Set the canvas to the maximum size required
-    setMaxCanvasSize();
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
-
-    // Draw all connections
     connections.forEach(function (connection) {
         if (connection.child.classList.contains("visible-node")) {
             setSize(connection);
         }
     });
 }
-
 document.querySelector(".graph-display").addEventListener("scroll", setManySize)
 function connectChildren(parent, node) {
     let children = node.querySelectorAll(".tree-node");
