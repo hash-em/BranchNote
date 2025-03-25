@@ -116,7 +116,7 @@ function showAll(node) {
             console.log(subconnections)
             if (subconnections != null) {
                 subconnections.forEach(function (subconnection) {
-                    subconnection.setAttribute("style", "display:")
+                    subconnection.parentNode.setAttribute("style", "display:")
                     subconnection.classList.add("visible-node")
                 })
             }
