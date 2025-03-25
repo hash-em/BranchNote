@@ -44,6 +44,7 @@ function setSize(connection) {
 }
 
 function setManySize() {
+    let head = document.querySelector(".tree-head")
     let container = document.querySelector(".graph-display");
     let canvas = document.getElementById("node-links");
     canvas.width = container.offsetWidth; // Match canvas size to container
