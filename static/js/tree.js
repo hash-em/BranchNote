@@ -61,6 +61,7 @@ function setSize(connection) {
 }
 
 function setManySize() {
+    document.querySelectorAll("svg").forEach(function (svg) { svg.setAttribute("display", "display") })
     connections.forEach(function (connection) {
         if (connection.child.classList.contains("visible-node")) {
             connection.svg.setAttribute("style", "display:")
@@ -128,16 +129,18 @@ function showAll(node) {
     connections.forEach(function (connection) {
         if (connection.parent == node) {
             connection.child.classList.add("visible-node");
-            let subconnections = connection.parent.parentNode.querySelector(".branch-children").querySelectorAll(".tree-node")
-            if (subconnections != null) {
-                subconnections.forEach(function (subconnection) {
-                    subconnection.parentNode.setAttribute("style", "display:")
-                    subconnection.classList.add("visible-node")
+            connection.svg.setAttribute("display", "display")
+            let subnodes = connection.parent.parentNode.querySelector(".branch-children").querySelectorAll(".tree-node")
+            if (subnodes != null) {
+                subnodes.forEach(function (subnode) {
+                    subnode.parentNode.setAttribute("style", "display:")
+                    subnode.classList.add("visible-node")
                 })
             }
 
         }
     })
+    setManySize()
 }
 
 
