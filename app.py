@@ -83,6 +83,11 @@ def display_study():
     test.addChild("plumbus",'morty')
     test.addChild("morty","jessica")
     test.addChildren("man","child","female")
+    test.addChild("jessica","franchise")
+    test.addChild("jessica","goat")
+    test.addChild("goat","animal")
+    test.addChild("animal","sacrifice")
+    test.addChild("sacrifice","to god")
     test.decsribe()
     tags = {}
     db.execute("SELECT * FROM travail WHERE user_id = ? AND done = 'n'",(session["user_id"],))

@@ -18,6 +18,7 @@ function getPosition(el) {
 }
 
 let connections = []
+
 function connectDots(dot_a, dot_b) {
 
     // Create the line element
@@ -35,23 +36,30 @@ function connectDots(dot_a, dot_b) {
 }
 
 function setSize(connection) {
+    let link_parent = document.getElementById("node-links");
+    let a = getPosition(connection.parent);
+    let b = getPosition(connection.child);
 
-    a = getPosition(connection.parent)
-    b = getPosition(connection.child)
+    // Calculate the maximum dimensions dynamically
+    let maxWidth = Math.max(a.x + a.node.offsetWidth, b.x);
+    let maxHeight = Math.max(a.y + 22, b.y + 22);
+
     let line = connection.svg.querySelector("line");
-    let svg = connection.svg
+    let svg = connection.svg;
+
     svg.setAttribute("id", "node-link");
-    svg.setAttribute("width", window.innerWidth);
-    svg.setAttribute("height", window.innerHeight);
-    svg.setAttribute("viewBox", `0 0 ${window.innerWidth} ${window.innerHeight}`);
+    svg.setAttribute("width", maxWidth); // Dynamically set width
+    svg.setAttribute("height", maxHeight); // Dynamically set height
     svg.setAttribute("style", "position:absolute; z-index: 10;");
+
     line.setAttribute("x1", a.x + a.node.offsetWidth);
     line.setAttribute("y1", a.y + 22);
     line.setAttribute("x2", b.x);
-    line.setAttribute("y2", b.y + 22); // 16 is the padding of 'tree-node' in the stylesheet
+    line.setAttribute("y2", b.y + 22); // 22 accounts for padding
     line.setAttribute("stroke", "black");
     line.setAttribute("stroke-width", "2");
 }
+
 function setManySize() {
     connections.forEach(function (connection) {
         if (connection.child.classList.contains("visible-node")) {
