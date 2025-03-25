@@ -1,66 +1,58 @@
 // TODO : PORT svg method to a simpler HTML canvas method
 // this is a git push test
 
-
 function visualize() {
-
     let tree_head = document.querySelector(".tree-head")
     tree_head.addEventListener("click", () => toggle(tree_head))
     let node = document.querySelector(".tree-body")
     connectChildren(tree_head, node)
+    setManySize()
 }
 
 function getPosition(el) {
-    let pos_x = el.offsetLeft;
-    let pos_y = el.offsetTop;
-    let pos = { 'x': pos_x, 'y': pos_y, 'node': el };
-    return pos;
+    let rect = el.getBoundingClientRect(); // Get element's position relative to the viewport
+    let container = document.querySelector(".graph-display").getBoundingClientRect(); // Get container's position
+    let pos_x = rect.left - container.left; // Subtract container's left offset
+    let pos_y = rect.top - container.top;   // Subtract container's top offset
+    return { 'x': pos_x, 'y': pos_y, 'node': el };
 }
 
 let connections = []
 function connectDots(dot_a, dot_b) {
-
-    // Create the line element
-    let svgNS = "http://www.w3.org/2000/svg";
-    let svg = document.createElementNS(svgNS, "svg");
-    let line = document.createElementNS(svgNS, "line");
-    svg.appendChild(line);
-    let connection = { 'parent': dot_a, 'child': dot_b, 'svg': svg };
-    document.getElementById("node-links").appendChild(svg);
+    let connection = { 'parent': dot_a, 'child': dot_b };
     connections.push(connection)
     setSize(connection)
-    // Append to the SVG container
-
-
 }
+
 function setSize(connection) {
-    let container = document.querySelector(".graph-display")
+    let canvas = document.getElementById("node-links");
+    let ctx = canvas.getContext("2d");
 
-    a = getPosition(connection.parent)
-    b = getPosition(connection.child)
-    let line = connection.svg.querySelector("line");
-    let svg = connection.svg
-    svg.setAttribute("id", "node-link");
-    svg.setAttribute("width", window.innerHeight); /// use window.innerHeight and width to avoid svg not rendering
-    svg.setAttribute("height", window.innerHeight); /// use container.offsetHeight and width for nice sizing and no overflow
-    svg.setAttribute("style", "position:absolute; z-index: 10;");
-    line.setAttribute("x1", (a.x + a.node.offsetWidth));
-    line.setAttribute("y1", (a.y + 22));
-    line.setAttribute("x2", (b.x));
-    line.setAttribute("y2", (b.y + 22)); // 16 is the padding of 'tree-node' in the stylesheet
-    line.setAttribute("stroke", "black");
-    line.setAttribute("stroke-width", "2");
+    let a = getPosition(connection.parent);
+    let b = getPosition(connection.child);
+
+    ctx.beginPath();
+    ctx.moveTo(a.x + a.node.offsetWidth, a.y + 16); // Center the line on the node
+    ctx.lineTo(b.x, b.y + 16); // Center the line on the node
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 2;
+    ctx.stroke();
 }
+
 function setManySize() {
+    let container = document.querySelector(".graph-display");
+    let canvas = document.getElementById("node-links");
+    canvas.width = container.offsetWidth; // Match canvas size to container
+    canvas.height = container.offsetHeight; // Match canvas size to container
+    let ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
     connections.forEach(function (connection) {
         if (connection.child.classList.contains("visible-node")) {
-            setSize(connection)
+            setSize(connection);
         }
-        else {
-            connection.svg.setAttribute("display", "none")
-        }
-    })
-    console.log(connections)
+    });
+    console.log(connections);
 }
 
 function connectChildren(parent, node) {
@@ -68,7 +60,6 @@ function connectChildren(parent, node) {
     if (children.length > 0) {
         for (let child of children) {
             child.addEventListener("click", () => toggle(child));
-            //child.addEventListener("mouseout", () => showAll(child))
             if (child.parentNode.parentNode.id == parent.id) {
                 connectDots(parent, child);
             }
@@ -81,12 +72,9 @@ function connectChildren(parent, node) {
 }
 let visible_connections = connections
 
-
 function toggle(node) {
-    let parent_connection = connections.find((connection) => connection.parent == node)
-
     focusOn(node)
-
+    let parent_connection = connections.find((connection) => connection.parent == node)
     if (parent_connection != undefined) {
         showAll(node)
     }
@@ -125,10 +113,8 @@ function showAll(node) {
         if (connection.parent == node) {
             connection.child.parentNode.setAttribute("style", "display :");
             connection.child.classList.add("visible-node");
-            connection.svg.setAttribute("display", "display");
             connections.forEach(function (subconnection) {
                 if (subconnection.parent == connection.child) {
-                    // if you remove this you can 'customize' the layout by clicking
                     showAll(connection.child);
                 }
             })
@@ -141,11 +127,8 @@ function showDescription(node) {
     let descriptionBox = document.querySelector(".descriptionBox")
     console.log(node.getAttribute("verbose"))
     descriptionBox.innerHTML = node.getAttribute("verbose")
-
 }
 
-
-//
 function create() {
     console.log("hi")
 }
@@ -153,9 +136,7 @@ console.log(document.title)
 if (document.title == "BranchNote - Notes") {
     window.addEventListener('resize', setManySize);
     window.addEventListener('load', visualize);
-}
-
-else if (document.title == "BranchNote - Create") {
+} else if (document.title == "BranchNote - Create") {
     window.addEventListener('load', create)
     window.addEventListener('resize', setManySize);
 }
