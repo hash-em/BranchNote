@@ -91,12 +91,10 @@ let visible_connections = connections
 
 
 function toggle(node) {
-    let child_connection = connections.find((connection) => connection.child == node)
+    focusOn(node)
     let parent_connection = connections.find((connection) => connection.parent == node)
-    if (child_connection.expanded == true) {
-        focusOn(node)
-    }
-    if (parent_connection != undefined && parent_connection.expanded == true) {
+
+    if (parent_connection != undefined) {
         showAll(node)
     }
     setManySize()
@@ -105,12 +103,6 @@ function toggle(node) {
 function focusOn(node) {
     node_div = node.parentNode
     if (!(node_div == document.querySelector(".tree"))) {
-        child_connection = visible_connections.find((connection) => connection.child == node)
-        if (child_connection != undefined) {
-            child_connection.expanded = false;
-            console.log(child_connection)
-        }
-
         parent_node = node_div.parentNode.parentNode
         branch = parent_node.querySelector(".branch-children").children
         for (child_node of branch) {
@@ -127,26 +119,22 @@ function focusOn(node) {
     }
 
     visible_connections = visible_connections.filter((connection) => connection.child.classList.contains("visible-node"))
-    setManySize()
 }
 
 function showAll(node) {
     console.log("showing")
     connections.forEach(function (connection) {
         if (connection.parent == node) {
-            connection.expanded = true;
             connection.child.parentNode.setAttribute("style", "display :");
             connection.child.classList.add("visible-node");
             connection.svg.setAttribute("display", "display");
             connections.forEach(function (subconnection) {
                 if (subconnection.parent == connection.child) {
-                    subconnection.expanded = true;
                     showAll(connection.child);
                 }
             })
         }
     })
-    setManySize()
 }
 
 
