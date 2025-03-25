@@ -76,19 +76,28 @@ def logout():
 @login_required
 def display_study():
 
-    test = tree("test")
-    test.addChildren("test","plumbus","omni")
-    test.addChildren("omni","man","woman")
-    test.addChild("plumbus","rick")
-    test.addChild("plumbus",'morty')
+    final = tree("final")
+    final.addChildren("final","plumbus","omni")
+    final.addChildren("omni","man","woman")
+    final.addChild("plumbus","rick")
+    final.addChild("plumbus",'morty')
+    final.addChild("morty","jessica")
+    final.addChildren("man","child","female")
+    final.addChild("jessica","franchise")
+    final.addChild("jessica","goat")
+    final.addChild("goat","animal")
+    final.addChild("animal","sacrifice")
+    final.addChild("sacrifice","to god")
+
+    test = tree("final")
+    test.addChildren("final","plumbus","omni","foo")
+    test.addChildren("omni","man")
+    test.addChildren("plumbus",'morty','rick')
     test.addChild("morty","jessica")
+    test.addChild("jessica","friend")
+    test.addChildren("foo","bar")
+    test.addChild("friend","of a friend")
     test.addChildren("man","child","female")
-    test.addChild("jessica","franchise")
-    test.addChild("jessica","goat")
-    test.addChild("goat","animal")
-    test.addChild("animal","sacrifice")
-    test.addChild("sacrifice","to god")
-    test.decsribe()
     tags = {}
     db.execute("SELECT * FROM travail WHERE user_id = ? AND done = 'n'",(session["user_id"],))
     todo = db.fetchmany()
@@ -104,7 +113,7 @@ def display_study():
                 tags,exercice = extract_tags(exercice)
                 exercice = markdown(exercice)
 
-            return render_template("study.html", todo=todo, exercice = exercice, tags = tags , name = query, tree=test)
+            return render_template("study.html", todo=todo, exercice = exercice, tags = tags , name = query, tree=final)
         except :
             flash("couldn't find")
             return redirect("/study")
