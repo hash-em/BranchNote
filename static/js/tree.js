@@ -93,32 +93,34 @@ let visible_connections = connections
 function toggle(node) {
     focusOn(node)
     let parent_connection = connections.find((connection) => connection.parent == node)
-
     if (parent_connection != undefined) {
         showAll(node)
     }
+    showDescription(node)
     setManySize()
 }
 
 function focusOn(node) {
-    node_div = node.parentNode
+    node_div = node.parentNode;
     if (!(node_div == document.querySelector(".tree"))) {
-        parent_node = node_div.parentNode.parentNode
-        branch = parent_node.querySelector(".branch-children").children
-        for (child_node of branch) {
 
+        parent_node = node_div.parentNode.parentNode;
+        branch = parent_node.querySelector(".branch-children").children;
+        for (child_node of branch) {
             if (!(child_node == node_div)) {
-                child_node.setAttribute("style", "display:none !important;")
-                child_node.querySelectorAll(".tree-node").forEach(function (node) { node.classList.remove("visible-node") })
+                child_node.setAttribute("style", "display:none !important;");
+                child_node.querySelectorAll(".tree-node").forEach(function (node) {
+                    node.classList.remove("visible-node");
+                });
             }
         }
-        next = parent_node.querySelector("#" + node_div.parentNode.parentNode.id, ".branch-head")
 
-        focusOn(next)
+        let next = connections.find((connection) => connection.child == node).parent
+        focusOn(next);
 
     }
 
-    visible_connections = visible_connections.filter((connection) => connection.child.classList.contains("visible-node"))
+    setManySize();
 }
 
 function showAll(node) {
@@ -127,10 +129,9 @@ function showAll(node) {
             connection.child.parentNode.setAttribute("style", "display :");
             connection.child.classList.add("visible-node");
             let subconnections = connection.parent.parentNode.querySelector(".branch-children").querySelectorAll(".tree-node")
-            console.log(subconnections)
             if (subconnections != null) {
                 subconnections.forEach(function (subconnection) {
-                    subconnection.setAttribute("style", "display:")
+                    subconnection.parentNode.setAttribute("style", "display:")
                     subconnection.classList.add("visible-node")
                 })
             }
