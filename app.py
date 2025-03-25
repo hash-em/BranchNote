@@ -80,7 +80,7 @@ def display_study():
     test.addDetails("final","somee details","some verbose details about the tree")
     test.addChildren("final","plumbus","omni","foo")
     test.addChildren("omni","man")
-    test.addChild("plumbus",'morty')
+    test.addChildren("plumbus",'morty','rick')
     test.addChild("morty","jessica")
     test.addChild("jessica","friend")
     test.addChildren("foo","bar")

@@ -1,7 +1,47 @@
 body {
     font-family: 'Arial', sans-serif;
     background-color: #f0f2f5;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
+
+body.dark-purple,
+nav {
+    /* GitHub dark background */
+    color: #c9d1d9;
+    /* GitHub text color */
+}
+
+body.dark-purple .container,
+body.dark-pruple nav,
+body.dark-purple .descriptionBox,
+body.dark-purple .menu,
+body.dark-purple #todo-aside,
+body.dark-purple .tree-node,
+body.dark-purple .leaf,
+body.dark-purple .description {
+    background-color: #161b22;
+    /* GitHub secondary background */
+    border-color: #30363d;
+    /* GitHub border color */
+    color: #c9d1d9;
+}
+
+body.dark-purple button.btn {
+    background-color: #238636;
+    /* GitHub green button */
+    color: #ffffff;
+}
+
+body.dark-purple button.btn:hover {
+    background-color: #2ea043;
+    /* GitHub green button hover */
+}
+
+body.dark-purple .tree-node .details {
+    background-color: #161b22;
+    border-color: #30363d;
+}
+
 
 .container,
 .descriptionBox {
@@ -15,6 +55,7 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     /*overflow-y: auto;*/
     display: grid;
+
 }
 
 
@@ -70,10 +111,12 @@ button.btn {
     padding: 0.5rem 1rem;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
 }
 
 button.btn:hover {
     background-color: #0056b3;
+    box-shadow: 0 0 12px rgba(0, 86, 179, 0.8);
 }
 
 .tree-container {
@@ -112,17 +155,19 @@ button.btn:hover {
     text-align: center;
     position: relative;
     transition: 0.3s;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+    z-index: 5;
 }
 
 .tree-node .details {
     opacity: 0%;
     transition: 0.5s;
     position: absolute;
-    bottom: -10px;
-    /* Adjusted to ensure it points correctly */
+    top: -20px;
+    /* Position above the node */
     left: 50%;
-    transform: translateX(-50%) translateY(100%);
-    /* Ensure it stays under the node */
+    transform: translateX(-50%) translateY(-100%);
+    /* Adjust to align properly */
     background-color: #ffffff;
     border: 1px solid #dee2e6;
     border-radius: 0.25rem;
@@ -130,29 +175,32 @@ button.btn:hover {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: 150px;
     text-align: center;
-    z-index: 100;
+    z-index: 2000;
     white-space: normal;
     border: #6c757d 1px solid;
-    /* Allow text to wrap */
 }
 
 .tree-node .details::before {
     content: "";
     position: absolute;
-    top: -10px;
+    top: 100%;
+    /* Move the triangle to the bottom of the details box */
+    bottom: unset;
+    /* Remove the previous bottom positioning */
     left: 50%;
     transform: translateX(-50%);
     width: 0;
     height: 0;
     border-left: 10px solid transparent;
     border-right: 10px solid transparent;
-    border-bottom: 10px solid #6c757d;
-
+    border-top: 10px solid #6c757d;
+    /* Invert the triangle to point upwards */
+    border-bottom: none;
+    /* Remove the previous bottom border */
 }
 
 .tree-node .details * {
     margin: 0;
-    padding-bottom: 0.5rem;
     border-bottom: 1px solid #dee2e6;
     display: block;
     width: 100%;
@@ -164,7 +212,10 @@ button.btn:hover {
 
 .tree-node:hover .details {
     opacity: 100%;
-    color: black;
+}
+
+.tree-node .details {
+    pointer-events: none;
 }
 
 .leaf {
@@ -177,13 +228,15 @@ button.btn:hover {
     margin-bottom: 0.5rem;
 }
 
-.tree-node .description {
+.tree-node .details {
     font-size: 1rem;
-    color: #6c757d;
+    z-index: 10;
 }
 
-.tree-node:hover {
-    color: #0056b3;
+.tree-node:hover,
+.leaf:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 12px rgba(0, 86, 179, 0.8);
 }
 
 .branch {
@@ -231,9 +284,16 @@ button.btn:hover {
 .node-link {
     transition: 0.2s;
     background-color: #6c757d;
+    box-shadow: 0 0 8px rgba(108, 117, 125, 0.5);
 }
-
 
 .node-link:hover {
     background-color: #0056b3;
+    box-shadow: 0 0 12px rgba(0, 86, 179, 0.8);
+}
+
+.tree-node,
+.leaf,
+.node-link {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
