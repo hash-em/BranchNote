@@ -63,6 +63,7 @@ function setSize(connection) {
 function setManySize() {
     connections.forEach(function (connection) {
         if (connection.child.classList.contains("visible-node")) {
+            connection.svg.setAttribute("style", "display:")
             setSize(connection)
         }
         else {
@@ -96,7 +97,7 @@ function toggle(node) {
     if (parent_connection != undefined) {
         showAll(node)
     }
-    showDescription(node)
+    //showDescription(node)
     setManySize()
 }
 
@@ -126,7 +127,6 @@ function focusOn(node) {
 function showAll(node) {
     connections.forEach(function (connection) {
         if (connection.parent == node) {
-            connection.child.parentNode.setAttribute("style", "display :");
             connection.child.classList.add("visible-node");
             let subconnections = connection.parent.parentNode.querySelector(".branch-children").querySelectorAll(".tree-node")
             if (subconnections != null) {
