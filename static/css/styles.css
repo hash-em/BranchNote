@@ -159,46 +159,6 @@ button.btn:hover {
     z-index: 5;
 }
 
-.tree-node .details {
-    opacity: 0%;
-    transition: 0.5s;
-    position: absolute;
-    top: -20px;
-    /* Position above the node */
-    left: 50%;
-    transform: translateX(-50%) translateY(-100%);
-    /* Adjust to align properly */
-    background-color: #ffffff;
-    border: 1px solid #dee2e6;
-    border-radius: 0.25rem;
-    padding: 0.5rem;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 150px;
-    text-align: center;
-    z-index: 2000;
-    white-space: normal;
-    border: #6c757d 1px solid;
-}
-
-.tree-node .details::before {
-    content: "";
-    position: absolute;
-    top: 100%;
-    /* Move the triangle to the bottom of the details box */
-    bottom: unset;
-    /* Remove the previous bottom positioning */
-    left: 50%;
-    transform: translateX(-50%);
-    width: 0;
-    height: 0;
-    border-left: 10px solid transparent;
-    border-right: 10px solid transparent;
-    border-top: 10px solid #6c757d;
-    /* Invert the triangle to point upwards */
-    border-bottom: none;
-    /* Remove the previous bottom border */
-}
-
 .tree-node .details * {
     margin: 0;
     border-bottom: 1px solid #dee2e6;
@@ -240,10 +200,12 @@ button.btn:hover {
 }
 
 .branch {
+
     display: block;
 }
 
 .branch-children {
+    z-index: 100;
     display: inline;
     margin-left: 20px;
     padding-left: 20px;
@@ -258,6 +220,7 @@ button.btn:hover {
 }
 
 .branch-head {
+    z-index: 100;
     display: inline-flex;
 }
 
@@ -296,4 +259,99 @@ button.btn:hover {
 .leaf,
 .node-link {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.tree-head .details {
+    opacity: 0%;
+    transition: 0.5s;
+    position: absolute;
+    top: 125% !important;
+    /* Position below the node */
+    left: 50% !important;
+    /* Center horizontally relative to the node */
+    transform: translateX(-50%) translateY(0) !important;
+    /* Adjust alignment */
+    background-color: #e3f2fd !important;
+    /* Light blue background for distinction */
+    color: #0d47a1 !important;
+    /* Dark blue text color */
+    font-weight: bold !important;
+    /* Make the text bold */
+    border: 2px solid #90caf9 !important;
+    /* Thicker border with a matching color */
+    box-shadow: 0 6px 12px rgba(33, 150, 243, 0.2) !important;
+    /* More prominent shadow */
+    width: 150px;
+    text-align: center;
+    z-index: 2000;
+    white-space: normal;
+    border: #6c757d 1px solid;
+}
+
+.tree-head .details::before {
+    content: "";
+    position: absolute;
+    top: -10px !important;
+    /* Position the triangle above the details box */
+    left: 50% !important;
+    transform: translateX(-50%) translateY(-50%) !important;
+    /* Center the triangle horizontally */
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent !important;
+    border-right: 10px solid transparent !important;
+    border-bottom: 10px solid #90caf9 !important;
+    /* Triangle pointing upwards */
+    border-top: none;
+    /* Remove the previous top border */
+}
+
+.tree-head .details * {
+    margin: 0;
+    border-bottom: 1px solid #dee2e6;
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+
+}
+
+.tree-node .details {
+    opacity: 0%;
+    transition: 0.5s;
+    position: absolute;
+    top: 50%;
+    /* Center vertically relative to the node */
+    left: -160px;
+    /* Position to the left of the node */
+    transform: translateX(-5%) translateY(-50%);
+    /* Adjust alignment */
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    padding: 0.5rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 150px;
+    text-align: center;
+    z-index: 2000;
+    white-space: normal;
+    border: #6c757d 1px solid;
+}
+
+.tree-node .details::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    /* Center the triangle vertically */
+    left: 100%;
+    /* Position the triangle at the right edge of the details box */
+    transform: translateY(-50%);
+    /* Adjust alignment */
+    width: 0;
+    height: 0;
+    border-left: 10px solid #6c757d;
+    /* Triangle pointing to the right */
+    border-right: none;
+    /* Remove the previous right border */
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
 }
