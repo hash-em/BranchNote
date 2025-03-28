@@ -5,7 +5,7 @@
 function main() {
 
     let tree_head = document.querySelector(".tree-head")
-    tree_head.addEventListener("click", () => showAll(tree_head))
+    tree_head.addEventListener("click", () => { showAll(tree_head), showDescription(tree_head) })
     let node = document.querySelector(".tree-body")
     connectChildren(tree_head, node)
 }
@@ -58,9 +58,42 @@ function setSize(connection) {
     line.setAttribute("y2", b.y + 22); // 22 accounts for padding
     line.setAttribute("stroke", "black");
     line.setAttribute("stroke-width", "2");
+    line.setAttribute("vector-effect", "non-scaling-stroke"); // Ensure consistent stroke width
 }
 
 function setManySize() {
+
+    let head = document.querySelector(".tree-head");
+
+    let headPosition = getPosition(head);
+    let closestNode = null;
+    let minDistance = Infinity;
+
+    document.querySelectorAll(".tree-node").forEach(node => {
+        if (node !== head && node.classList.contains("visible-node")) {
+            let nodePosition = getPosition(node);
+            let distance = Math.sqrt(
+                Math.pow(nodePosition.x - headPosition.x, 2) +
+                Math.pow(nodePosition.y - headPosition.y, 2)
+            );
+            if (distance < minDistance) {
+                minDistance = distance;
+                closestNode = node;
+            }
+        }
+    });
+
+    // Adjust head's y-coordinate to match the closest node
+    if (closestNode) {
+        console.log(closestNode)
+        let closestNodePosition = getPosition(closestNode);
+        let offsetY = closestNodePosition.y - headPosition.y; // Calculate the difference in y-coordinates
+        let currentTop = parseFloat(window.getComputedStyle(head).top) || 0; // Get current top value
+        head.style.top = `${currentTop + offsetY}px`; // Adjust head's position
+    }
+
+
+
     document.querySelectorAll("svg").forEach(function (svg) { svg.setAttribute("display", "display") })
     connections.forEach(function (connection) {
         if (connection.child.classList.contains("visible-node")) {
@@ -88,8 +121,8 @@ function connectChildren(parent, node) {
             }
         }
     }
+    setManySize()
 }
-let visible_connections = connections
 
 
 function toggle(node) {

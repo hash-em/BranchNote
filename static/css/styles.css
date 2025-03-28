@@ -53,9 +53,11 @@ body.dark-purple .tree-node .details {
     border-radius: 0.25rem;
     padding: 1rem;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    /*overflow-y: auto;*/
-    display: grid;
 
+}
+
+.container {
+    display: grid;
 }
 
 
