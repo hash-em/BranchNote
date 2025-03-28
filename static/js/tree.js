@@ -1,7 +1,7 @@
 // TODO : PORT svg method to a simpler HTML canvas method
 // this is a git push test
 
-function visualize() {
+function main() {
     let tree_head = document.querySelector(".tree-head")
     tree_head.addEventListener("click", () => { showAll(tree_head), showDescription(tree_head) })
     let node = document.querySelector(".tree-body")
@@ -172,5 +172,6 @@ function showDescription(node) {
     let descriptionBox = document.querySelector(".descriptionBox")
     descriptionBox.innerHTML = node.getAttribute("verbose")
 }
+
 window.addEventListener('resize', setManySize)
 window.addEventListener('load', main);
