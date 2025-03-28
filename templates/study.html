@@ -9,12 +9,10 @@
             <!-- Markdown content will be displayed here -->
             <!-- Basic tree search  -->
             {% if tree %}
-            {% set size = tree.maxDepth(starting_level=1) %}
             <script src="/static/js/tree.js"></script>
             <div id="{{ tree.head }}" class="tree mt-3">
                 <div id="{{ tree.head }}" class="tree-node visible-node tree-head"
-                    verbose="{% if tree.verbose %}{{ tree.verbose }}{% endif %}" details="{{ tree.details}}"
-                    style="top: -{{ depth*30 }}px;">
+                    verbose="{% if tree.verbose %}{{ tree.verbose }}{% endif %}" details="{{ tree.details}}">
 
                     <div class="symbol">{{tree.head}} <span class="badge bg-primary">Head</span></div>
                     <div class="details">{{ tree.details }}</div>
@@ -50,10 +48,7 @@
                                     </span>
 
                                 </div>
-                                <div class="details">{{ node.details }} Lorem ipsum dolor sit amet consectetur
-                                    adipisicing elit. Facilis velit ea perferendis minus. Iure quaerat soluta rerum
-                                    aspernatur veritatis doloremque similique possimus commodi. Magnam ex harum iste
-                                    placeat provident quisquam.</div>
+                                {% if node.details %}<div class="details">{{ node.details }}</div>{% endif %}
                             </div>
 
                             {% endif %}
@@ -74,7 +69,7 @@
 
         </main>
         <div class="col-md-4 descriptionBox">
-            {{tree.verbose}}
+            {{tree.verbose | safe}}
         </div>
 
     </div>

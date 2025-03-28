@@ -3,7 +3,7 @@ from flask_session import Session
 from db import conn_params,password_hash,login_required,session_collect,db,connection
 from markdown import markdown
 from helpers import extract_tags
-from tree import tree
+from tree import tree,markdownTree
 # FLASK #INTIALISATION
 app = Flask(__name__)
 app.config["SESSION_PERMANENT"] = False
@@ -75,20 +75,7 @@ def logout():
 @app.route("/study", methods=["GET","POST"])
 @login_required
 def display_study():
-
-    final = tree("final")
-    final.addChildren("final","plumbus","omni")
-    final.addChildren("omni","man","woman")
-    final.addChild("plumbus","rick")
-    final.addChild("plumbus",'morty')
-    final.addChild("morty","jessica")
-    final.addChildren("man","child","female")
-    final.addChild("jessica","franchise")
-    final.addChild("jessica","goat")
-    final.addChild("goat","animal")
-    final.addChild("animal","sacrifice")
-    final.addChild("sacrifice","to god")
-
+    """
     test = tree("final")
     test.addChildren("final","plumbus","omni","foo")
     test.addChildren("omni","man")
@@ -97,14 +84,17 @@ def display_study():
     test.addChild("jessica","friend")
     test.addChildren("foo","bar")
     test.addChild("friend","of a friend")
-    test.addChildren("man","child","female")
+    test.addChildren("man","child","female")"""
+    file = open("test.md","r")
+    test = markdownTree(file)
+    file.close
     tags = {}
     db.execute("SELECT * FROM travail WHERE user_id = ? AND done = 'n'",(session["user_id"],))
     todo = db.fetchmany()
     # TODO remove this
     todo = ["this",'that',"those"]
     if request.method == "GET":
-        return render_template("study.html",todo = todo, depth = test.maxDepth(),tree = test)
+        return render_template("study.html",todo = todo,tree = test)
     else:
         query = request.form.get("query")
         try :
@@ -113,7 +103,7 @@ def display_study():
                 tags,exercice = extract_tags(exercice)
                 exercice = markdown(exercice)
 
-            return render_template("study.html", todo=todo, exercice = exercice, tags = tags , name = query, tree=final)
+            return render_template("study.html", todo=todo, exercice = exercice, tags = tags , name = query, tree=test)
         except :
             flash("couldn't find")
             return redirect("/study")

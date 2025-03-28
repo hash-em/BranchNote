@@ -98,7 +98,7 @@ function toggle(node) {
     if (parent_connection != undefined) {
         showAll(node)
     }
-    //showDescription(node)
+    showDescription(node)
     setManySize()
 }
 
@@ -143,6 +143,9 @@ function showAll(node) {
     setManySize()
 }
 
-
+function showDescription(node) {
+    let descriptionBox = document.querySelector(".descriptionBox")
+    descriptionBox.innerHTML = node.getAttribute("verbose")
+}
 window.addEventListener('resize', setManySize)
 window.addEventListener('load', main);
