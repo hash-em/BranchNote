@@ -1,38 +1,28 @@
 // TODO : PORT svg method to a simpler HTML canvas method
 // this is a git push test
 
-
-function main() {
-
+function visualize() {
     let tree_head = document.querySelector(".tree-head")
     tree_head.addEventListener("click", () => { showAll(tree_head), showDescription(tree_head) })
     let node = document.querySelector(".tree-body")
     connectChildren(tree_head, node)
+    setManySize()
 }
 
 function getPosition(el) {
-    let pos_x = el.offsetLeft;
-    let pos_y = el.offsetTop;
-    let pos = { 'x': pos_x, 'y': pos_y, 'node': el };
-    return pos;
+    let rect = el.getBoundingClientRect(); // Get element's position relative to the viewport
+    let container = document.querySelector(".graph-display").getBoundingClientRect(); // Get container's position
+    let pos_x = rect.left - container.left; // Subtract container's left offset
+    let pos_y = rect.top - container.top;   // Subtract container's top offset
+    return { 'x': pos_x, 'y': pos_y, 'node': el };
 }
 
 let connections = []
 
 function connectDots(dot_a, dot_b) {
-
-    // Create the line element
-    let svgNS = "http://www.w3.org/2000/svg";
-    let svg = document.createElementNS(svgNS, "svg");
-    let line = document.createElementNS(svgNS, "line");
-    svg.appendChild(line);
-    let connection = { 'parent': dot_a, 'child': dot_b, 'svg': svg, 'expanded': true };
-    document.getElementById("node-links").appendChild(svg);
+    let connection = { 'parent': dot_a, 'child': dot_b };
     connections.push(connection)
     setSize(connection)
-    // Append to the SVG container
-
-
 }
 
 function setSize(connection) {
@@ -100,18 +90,16 @@ function setManySize() {
             connection.svg.setAttribute("style", "display:")
             setSize(connection)
         }
-        else {
-            connection.svg.setAttribute("display", "none")
-        }
-    })
+    });
 }
+
+document.querySelector(".graph-display").addEventListener("scroll", setManySize)
 
 function connectChildren(parent, node) {
     let children = node.querySelectorAll(".tree-node");
     if (children.length > 0) {
         for (let child of children) {
             child.addEventListener("click", () => toggle(child));
-            //child.addEventListener("mouseout", () => showAll(child))
             if (child.parentNode.parentNode.id == parent.id) {
                 connectDots(parent, child);
             }
@@ -173,7 +161,11 @@ function showAll(node) {
 
         }
     })
-    setManySize()
+}
+
+function showDescription(node) {
+    let descriptionBox = document.querySelector(".descriptionBox")
+    descriptionBox.innerHTML = node.getAttribute("verbose")
 }
 
 function showDescription(node) {
@@ -181,4 +173,4 @@ function showDescription(node) {
     descriptionBox.innerHTML = node.getAttribute("verbose")
 }
 window.addEventListener('resize', setManySize)
-window.addEventListener('load', main);
+window.addEventListener('load', visuali);

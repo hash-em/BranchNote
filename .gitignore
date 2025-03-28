@@ -4,5 +4,6 @@ C:\Users\heshm\Desktop\Final Project cs50\__pycache__\app.cpython-313.pyc
 .vscode
 
 # Ignore Python cache files
+flask_session/
 __pycache__/
 *.pyc
