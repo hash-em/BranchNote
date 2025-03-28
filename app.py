@@ -91,8 +91,7 @@ def display_study():
     test.decsribe()"""
     file = open("test.md","r")
     test = markdownTree(file)
-    print(test.children)
-    test.decsribe()
+    file.close()
     db.execute("SELECT * FROM travail WHERE user_id = ? AND done = 'n'",(session["user_id"],))
     todo = db.fetchmany()
     # TODO remove this
