@@ -3,7 +3,7 @@
 
 function visualize() {
     let tree_head = document.querySelector(".tree-head")
-    tree_head.addEventListener("click", () => toggle(tree_head))
+    tree_head.addEventListener("click", () => { showAll(tree_head), showDescription(tree_head) })
     let node = document.querySelector(".tree-body")
     connectChildren(tree_head, node)
     setManySize()
@@ -18,6 +18,7 @@ function getPosition(el) {
 }
 
 let connections = []
+
 function connectDots(dot_a, dot_b) {
     let connection = { 'parent': dot_a, 'child': dot_b };
     connections.push(connection)
@@ -25,41 +26,41 @@ function connectDots(dot_a, dot_b) {
 }
 
 function setSize(connection) {
-    let container = document.querySelector(".graph-display"); // Get the scrolling container
-    let canvas = document.getElementById("node-links");
-    let ctx = canvas.getContext("2d");
-
-    let scrollX = container.scrollLeft; // Correctly get horizontal scroll offset
-    let scrollY = container.scrollTop;  // Correctly get vertical scroll offset
-
+    let link_parent = document.getElementById("node-links");
     let a = getPosition(connection.parent);
     let b = getPosition(connection.child);
 
-    ctx.beginPath();
-    ctx.moveTo(a.x + a.node.offsetWidth + scrollX, a.y + 16 + scrollY); // Adjust for scroll
-    ctx.lineTo(b.x + scrollX, b.y + scrollY + 16); // Adjust for scroll
-    ctx.strokeStyle = "black";
-    ctx.lineWidth = 2;
-    ctx.stroke();
+    // Calculate the maximum dimensions dynamically
+    let maxWidth = Math.max(a.x + a.node.offsetWidth, b.x);
+    let maxHeight = Math.max(a.y + 22, b.y + 22);
+
+    let line = connection.svg.querySelector("line");
+    let svg = connection.svg;
+
+    svg.setAttribute("id", "node-link");
+    svg.setAttribute("width", maxWidth); // Dynamically set width
+    svg.setAttribute("height", maxHeight); // Dynamically set height
+    svg.setAttribute("style", "position:absolute; z-index: 10;");
+
+    line.setAttribute("x1", a.x + a.node.offsetWidth);
+    line.setAttribute("y1", a.y + 22);
+    line.setAttribute("x2", b.x);
+    line.setAttribute("y2", b.y + 22); // 22 accounts for padding
+    line.setAttribute("stroke", "black");
+    line.setAttribute("stroke-width", "2");
+    line.setAttribute("vector-effect", "non-scaling-stroke"); // Ensure consistent stroke width
 }
 
 function setManySize() {
+
     let head = document.querySelector(".tree-head");
 
-    let container = document.querySelector(".graph-display");
-    let canvas = document.getElementById("node-links");
-    canvas.width = container.offsetWidth; // Match canvas size to container
-    canvas.height = container.offsetHeight; // Match canvas size to container
-    let ctx = canvas.getContext("2d");
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // Find the closest x, y element to the head
     let headPosition = getPosition(head);
     let closestNode = null;
     let minDistance = Infinity;
 
     document.querySelectorAll(".tree-node").forEach(node => {
-        if (node !== head) {
+        if (node !== head && node.classList.contains("visible-node")) {
             let nodePosition = getPosition(node);
             let distance = Math.sqrt(
                 Math.pow(nodePosition.x - headPosition.x, 2) +
@@ -74,15 +75,20 @@ function setManySize() {
 
     // Adjust head's y-coordinate to match the closest node
     if (closestNode) {
+        console.log(closestNode)
         let closestNodePosition = getPosition(closestNode);
         let offsetY = closestNodePosition.y - headPosition.y; // Calculate the difference in y-coordinates
         let currentTop = parseFloat(window.getComputedStyle(head).top) || 0; // Get current top value
         head.style.top = `${currentTop + offsetY}px`; // Adjust head's position
     }
 
+
+
+    document.querySelectorAll("svg").forEach(function (svg) { svg.setAttribute("display", "display") })
     connections.forEach(function (connection) {
         if (connection.child.classList.contains("visible-node")) {
-            setSize(connection);
+            connection.svg.setAttribute("style", "display:")
+            setSize(connection)
         }
     });
 }
@@ -103,7 +109,9 @@ function connectChildren(parent, node) {
             }
         }
     }
+    setManySize()
 }
+
 
 function toggle(node) {
     focusOn(node)
@@ -112,42 +120,42 @@ function toggle(node) {
         showAll(node)
     }
     showDescription(node)
-    setManySize(); // remove css hover effect on treenode transfrom scale to make them perfectly aligner
+    setManySize()
 }
 
 function focusOn(node) {
-    node_div = node.parentNode
+    node_div = node.parentNode;
     if (!(node_div == document.querySelector(".tree"))) {
-        child_connection = connections.find((connection) => connection.child == node)
-        if (child_connection != undefined) {
-        }
 
-        parent_node = node_div.parentNode.parentNode
-        branch = parent_node.querySelector(".branch-children").children
+        parent_node = node_div.parentNode.parentNode;
+        branch = parent_node.querySelector(".branch-children").children;
         for (child_node of branch) {
-
             if (!(child_node == node_div)) {
-                child_node.setAttribute("style", "display:none !important;")
-                child_node.querySelectorAll(".tree-node").forEach(function (node) { node.classList.remove("visible-node") })
+                child_node.setAttribute("style", "display:none !important;");
+                child_node.querySelectorAll(".tree-node").forEach(function (node) {
+                    node.classList.remove("visible-node");
+                });
             }
         }
-        next = parent_node.querySelector("#" + node_div.parentNode.parentNode.id, ".branch-head")
 
-        focusOn(next)
+        let next = connections.find((connection) => connection.child == node).parent
+        focusOn(next);
 
     }
+
+    setManySize();
 }
 
 function showAll(node) {
     connections.forEach(function (connection) {
         if (connection.parent == node) {
-            connection.child.parentNode.setAttribute("style", "display :");
             connection.child.classList.add("visible-node");
-            let subconnections = connection.parent.parentNode.querySelector(".branch-children").querySelectorAll(".tree-node")
-            if (subconnections != null) {
-                subconnections.forEach(function (subconnection) {
-                    subconnection.parentNode.setAttribute("style", "display:")
-                    subconnection.classList.add("visible-node")
+            connection.svg.setAttribute("display", "display")
+            let subnodes = connection.parent.parentNode.querySelector(".branch-children").querySelectorAll(".tree-node")
+            if (subnodes != null) {
+                subnodes.forEach(function (subnode) {
+                    subnode.parentNode.setAttribute("style", "display:")
+                    subnode.classList.add("visible-node")
                 })
             }
 
@@ -160,13 +168,9 @@ function showDescription(node) {
     descriptionBox.innerHTML = node.getAttribute("verbose")
 }
 
-function create() {
-    console.log("hi")
+function showDescription(node) {
+    let descriptionBox = document.querySelector(".descriptionBox")
+    descriptionBox.innerHTML = node.getAttribute("verbose")
 }
-if (document.title == "BranchNote - Notes") {
-    window.addEventListener('resize', setManySize);
-    window.addEventListener('load', visualize);
-} else if (document.title == "BranchNote - Create") {
-    window.addEventListener('load', create)
-    window.addEventListener('resize', setManySize);
-}
+window.addEventListener('resize', setManySize)
+window.addEventListener('load', main);

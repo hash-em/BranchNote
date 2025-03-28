@@ -1,3 +1,4 @@
+// master canvas
 {% extends "layout.html" %}
 {% block title %} - Notes{% endblock %}
 {% block main %}
@@ -15,11 +16,10 @@
             <!-- Markdown content will be displayed here -->
             <!-- Basic tree search  -->
             {% if tree %}
-            {% set size = tree.maxDepth(starting_level=1) %}
             <script src="/static/js/tree.js"></script>
             <div id="{{ tree.head }}" class="tree mt-3">
                 <div id="{{ tree.head }}" class="tree-node visible-node tree-head"
-                    verbose="{% if tree.verbose %}{{ tree.verbose }}{% endif %}" details="{{ tree.details}}">
+                    verbose="{% if tree.verbose %}{{ tree.verbose }}{% endif %}" details="{{ tree.details }}">
 
                     <div class="symbol">{{tree.head}} <span class="badge bg-primary">Head</span></div>
                     <div class="details">{{ tree.details }}</div>
@@ -55,7 +55,7 @@
                                     </span>
 
                                 </div>
-                                <div class="details">{{ node.details }}</div>
+                                {% if node.details %}<div class="details">{{ node.details }}</div>{% endif %}
                             </div>
 
                             {% endif %}
@@ -63,11 +63,14 @@
                         {% endfor %}
                     </div>
                     <!--TODO : populate node links-->
+                    <div id="node-links" class="node-links mt-3 position-absolute" style="z-index: 1;">
+
+                    </div>
                 </div>
-                <canvas id="node-links" class="node-links mt-3 position-absolute"
-                    style="z-index: 1; overflow: visible;"></canvas>
                 <!--Tree end below-->
                 {% endif %}
+
+
 
                 <!-- Add menu items here -->
 
@@ -87,24 +90,5 @@
             {% endfor %}
         </ul>
     </aside>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const closestNode = document.querySelector('.closestnode'); // Replace with the actual selector for closestnode
-            const treeHead = document.querySelector('.tree-head');
-
-            if (closestNode && treeHead) {
-                // Get the position of closestNode relative to the document
-                const closestNodeRect = closestNode.getBoundingClientRect();
-                const graphDisplayRect = document.querySelector('.graph-display').getBoundingClientRect();
-
-                // Calculate the Y-coordinate relative to the graph-display container
-                const offsetY = closestNodeRect.top - graphDisplayRect.top;
-
-                // Adjust the tree-head position
-                treeHead.style.position = 'absolute';
-                treeHead.style.top = `${offsetY}px`;
-            }
-        });
-    </script>
 </div>
 {% endblock %}

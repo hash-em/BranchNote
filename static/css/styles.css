@@ -53,9 +53,11 @@ body.dark-purple .tree-node .details {
     border-radius: 0.25rem;
     padding: 1rem;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    /*overflow-y: auto;*/
-    display: grid;
 
+}
+
+.container {
+    display: grid;
 }
 
 
@@ -150,14 +152,16 @@ button.btn:hover {
     border-radius: 0.25rem;
     padding: 1rem;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 100px;
-    height: 60px;
+    width: auto;
+    height: auto;
+    max-height: 60px;
     text-align: center;
     position: relative;
     transition: 0.3s;
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
     z-index: 5;
 }
+
 
 .tree-node .details * {
     margin: 0;
@@ -195,14 +199,8 @@ button.btn:hover {
 
 .tree-node:hover,
 .leaf:hover {
-    transform: scale(1);
-    /* can make 1.5 but ruins links */
+    transform: scale(1.1);
     box-shadow: 0 0 12px rgba(0, 86, 179, 0.8);
-}
-
-.tree-node:use,
-.leaf:hover:use {
-    transform: scale(50);
 }
 
 

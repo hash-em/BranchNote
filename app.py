@@ -3,7 +3,7 @@ from flask_session import Session
 from db import conn_params,password_hash,login_required,session_collect,db,connection
 from markdown import markdown
 from helpers import extract_tags
-from tree import tree,markdownTree
+from tree import tree,markdownTree,markdownTree
 # FLASK #INTIALISATION
 app = Flask(__name__)
 app.config["SESSION_PERMANENT"] = False
@@ -77,7 +77,6 @@ def logout():
 def display_study():
     """
     test = tree("final")
-    test.addDetails("final","somee details","some verbose details about the tree")
     test.addChildren("final","plumbus","omni","foo")
     test.addChildren("omni","man")
     test.addChildren("plumbus",'morty','rick')
@@ -85,13 +84,11 @@ def display_study():
     test.addChild("jessica","friend")
     test.addChildren("foo","bar")
     test.addChild("friend","of a friend")
-    test.addChildren("man","child","female")
-    test.addDetails("of a friend","he is nice","kind of nice")
-    test.addDetails("man","<p>he is the son of god</p>","<h1>he is a creation</h1><p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore, modi repudiandae. Nulla tempore suscipit fuga, a, nam voluptates mollitia, est excepturi possimus animi accusamus impedit minima rerum incidunt voluptatum eos.Saepe, assumenda excepturi. Distinctio in optio facere itaque, nobis dicta aliquam animi. Cumque libero hic sapiente quod? Beatae cumque veniam magni ipsam consequuntur sit eius libero voluptate! Recusandae, repellendus facere?Harum quod excepturi quae modi, rem commodi debitis voluptate. Voluptatem blanditiis ducimus, ipsum est vero ea dolor ad voluptas molestias corporis doloribus minima sit consectetur, ut fugit veniam iure facere!you know..</p><h2>FROM GOD</h2>")
-    test.decsribe()"""
+    test.addChildren("man","child","female")"""
     file = open("test.md","r")
     test = markdownTree(file)
-    file.close()
+    file.close
+    tags = {}
     db.execute("SELECT * FROM travail WHERE user_id = ? AND done = 'n'",(session["user_id"],))
     todo = db.fetchmany()
     # TODO remove this
