@@ -195,9 +195,16 @@ button.btn:hover {
 
 .tree-node:hover,
 .leaf:hover {
-    transform: scale(1.1);
+    transform: scale(1);
+    /* can make 1.5 but ruins links */
     box-shadow: 0 0 12px rgba(0, 86, 179, 0.8);
 }
+
+.tree-node:use,
+.leaf:hover:use {
+    transform: scale(50);
+}
+
 
 .branch {
 

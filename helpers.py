@@ -1,4 +1,3 @@
-
 def extract_tags(markdown:str):
 
     # extracting yaml part
@@ -10,10 +9,9 @@ def extract_tags(markdown:str):
 
     # updating markdown file
     markdown = markdown[yaml_end+3:]
-    
+
     for tag in tag_list:
         key,value = tag.split(":")
         tags[key.strip()] = value.strip()
     print(tags)
     return tags,markdown
-

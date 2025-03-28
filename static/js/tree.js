@@ -37,13 +37,15 @@ function setSize(connection) {
 
     ctx.beginPath();
     ctx.moveTo(a.x + a.node.offsetWidth + scrollX, a.y + 16 + scrollY); // Adjust for scroll
-    ctx.lineTo(b.x + scrollX, b.y + 16 + scrollY); // Adjust for scroll
+    ctx.lineTo(b.x + scrollX, b.y + scrollY + 16); // Adjust for scroll
     ctx.strokeStyle = "black";
     ctx.lineWidth = 2;
     ctx.stroke();
 }
 
 function setManySize() {
+    let head = document.querySelector(".tree-head");
+
     let container = document.querySelector(".graph-display");
     let canvas = document.getElementById("node-links");
     canvas.width = container.offsetWidth; // Match canvas size to container
@@ -51,13 +53,42 @@ function setManySize() {
     let ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+    // Find the closest x, y element to the head
+    let headPosition = getPosition(head);
+    let closestNode = null;
+    let minDistance = Infinity;
+
+    document.querySelectorAll(".tree-node").forEach(node => {
+        if (node !== head) {
+            let nodePosition = getPosition(node);
+            let distance = Math.sqrt(
+                Math.pow(nodePosition.x - headPosition.x, 2) +
+                Math.pow(nodePosition.y - headPosition.y, 2)
+            );
+            if (distance < minDistance) {
+                minDistance = distance;
+                closestNode = node;
+            }
+        }
+    });
+
+    // Adjust head's y-coordinate to match the closest node
+    if (closestNode) {
+        let closestNodePosition = getPosition(closestNode);
+        let offsetY = closestNodePosition.y - headPosition.y; // Calculate the difference in y-coordinates
+        let currentTop = parseFloat(window.getComputedStyle(head).top) || 0; // Get current top value
+        head.style.top = `${currentTop + offsetY}px`; // Adjust head's position
+    }
+
     connections.forEach(function (connection) {
         if (connection.child.classList.contains("visible-node")) {
             setSize(connection);
         }
     });
 }
+
 document.querySelector(".graph-display").addEventListener("scroll", setManySize)
+
 function connectChildren(parent, node) {
     let children = node.querySelectorAll(".tree-node");
     if (children.length > 0) {
@@ -81,7 +112,7 @@ function toggle(node) {
         showAll(node)
     }
     showDescription(node)
-    setManySize()
+    setManySize(); // remove css hover effect on treenode transfrom scale to make them perfectly aligner
 }
 
 function focusOn(node) {
@@ -113,7 +144,6 @@ function showAll(node) {
             connection.child.parentNode.setAttribute("style", "display :");
             connection.child.classList.add("visible-node");
             let subconnections = connection.parent.parentNode.querySelector(".branch-children").querySelectorAll(".tree-node")
-            console.log(subconnections)
             if (subconnections != null) {
                 subconnections.forEach(function (subconnection) {
                     subconnection.parentNode.setAttribute("style", "display:")
@@ -127,14 +157,12 @@ function showAll(node) {
 
 function showDescription(node) {
     let descriptionBox = document.querySelector(".descriptionBox")
-    console.log(node.getAttribute("verbose"))
     descriptionBox.innerHTML = node.getAttribute("verbose")
 }
 
 function create() {
     console.log("hi")
 }
-console.log(document.title)
 if (document.title == "BranchNote - Notes") {
     window.addEventListener('resize', setManySize);
     window.addEventListener('load', visualize);

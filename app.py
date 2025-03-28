@@ -3,7 +3,7 @@ from flask_session import Session
 from db import conn_params,password_hash,login_required,session_collect,db,connection
 from markdown import markdown
 from helpers import extract_tags
-from tree import tree
+from tree import tree,markdownTree
 # FLASK #INTIALISATION
 app = Flask(__name__)
 app.config["SESSION_PERMANENT"] = False
@@ -75,7 +75,7 @@ def logout():
 @app.route("/study", methods=["GET","POST"])
 @login_required
 def display_study():
-
+    """
     test = tree("final")
     test.addDetails("final","somee details","some verbose details about the tree")
     test.addChildren("final","plumbus","omni","foo")
@@ -87,17 +87,18 @@ def display_study():
     test.addChild("friend","of a friend")
     test.addChildren("man","child","female")
     test.addDetails("of a friend","he is nice","kind of nice")
-    test.addChild("of a friend","grand")
     test.addDetails("man","<p>he is the son of god</p>","<h1>he is a creation</h1><p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore, modi repudiandae. Nulla tempore suscipit fuga, a, nam voluptates mollitia, est excepturi possimus animi accusamus impedit minima rerum incidunt voluptatum eos.Saepe, assumenda excepturi. Distinctio in optio facere itaque, nobis dicta aliquam animi. Cumque libero hic sapiente quod? Beatae cumque veniam magni ipsam consequuntur sit eius libero voluptate! Recusandae, repellendus facere?Harum quod excepturi quae modi, rem commodi debitis voluptate. Voluptatem blanditiis ducimus, ipsum est vero ea dolor ad voluptas molestias corporis doloribus minima sit consectetur, ut fugit veniam iure facere!you know..</p><h2>FROM GOD</h2>")
+    test.decsribe()"""
+    file = open("test.md","r")
+    test = markdownTree(file)
+    print(test.children)
     test.decsribe()
-    tags = {}
-    depth = test.maxDepth()
     db.execute("SELECT * FROM travail WHERE user_id = ? AND done = 'n'",(session["user_id"],))
     todo = db.fetchmany()
     # TODO remove this
     todo = ["this",'that',"those"]
     if request.method == "GET":
-        return render_template("study.html",todo = todo, depth = depth,tree = test)
+        return render_template("study.html",todo = todo,tree = test)
     else:
         query = request.form.get("query")
         try :
