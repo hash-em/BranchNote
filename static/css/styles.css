@@ -61,7 +61,7 @@ body.dark-purple .tree-node .details {
 }
 
 
-#graph-display {
+.graph-display {
     align-self: center;
     overflow: visible;
 }
@@ -156,6 +156,7 @@ button.btn:hover {
     height: auto;
     max-height: 60px;
     min-width: fit-content;
+    text-wrap: nowrap;
     text-align: center;
     position: relative;
     transition: 0.3s;
@@ -205,7 +206,7 @@ button.btn:hover {
 .tree-node:hover,
 .leaf:hover {
     transform: scale(1.1);
-    box-shadow: 0 0 12px rgba(0, 86, 179, 0.8);
+    box-shadow: 0 0 60px rgba(0, 86, 179, 0.4);
 }
 
 
@@ -248,6 +249,7 @@ button.btn:hover {
     height: 100%;
     overflow: visible;
     pointer-events: none;
+    transform: translateY(0.5%);
 }
 
 .branch-head {

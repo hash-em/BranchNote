@@ -69,14 +69,20 @@ Uranus and Neptune, the ice giants, are composed primarily of water, methane, an
 ![alt text](https://royalsociety.org/-/media/blogs/2020/11/ice-giants/igsystems_cover_corrected.png)
 
 ---
+## the big bob
 
+
+---
+
+## the small bob
+
+---
 # Nomen
 
 ==ghorbel==
 # Mon père
 
 bla bla bla
-
 
 ---
 
@@ -87,5 +93,31 @@ bla bla bla
 # Fils de nomen
 
 description de hashem
+
+---
+
+## ghada
+
+
+must there be content ?
+
+---
+
+## amal
+
+as usal
+
+---
+
+### bio
+
+---
+
+#### chimie
+
+---
+
+##### yeah
+
 
 ---
