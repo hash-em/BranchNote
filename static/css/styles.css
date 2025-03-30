@@ -64,6 +64,9 @@ body.dark-purple .tree-node .details {
 .graph-display {
     align-self: center;
     overflow: visible;
+    /* height: fit-content;
+    padding-bottom: 80px;
+    /* here remove padding and fir content to return normal*/
 }
 
 
