@@ -8,8 +8,6 @@ function main() {
     tree_head.addEventListener("click", () => { showAll(tree_head), showDescription(tree_head), setManySize() })
     let node = document.querySelector(".tree-body")
     connectChildren(tree_head, node)
-    setManySize()
-
 }
 
 function getPosition(el) {
@@ -29,7 +27,6 @@ function toggle(node) {
         showAll(node)
     }
     showDescription(node)
-    setToPpoistion()
     setManySize()
 }
 
@@ -76,6 +73,8 @@ function setSize(connection) {
 }
 
 function setManySize() {
+
+    setToPpoistion()
     document.querySelectorAll("svg").forEach(function (svg) { svg.setAttribute("display", "display") })
     connections.forEach(function (connection) {
         if (connection.child.classList.contains("visible-node")) {
@@ -103,7 +102,6 @@ function setToPpoistion() {
 
     let closestNode = null;
     let minDistance = Infinity;
-    let closestNodePosition = null;
 
     document.querySelectorAll(".tree-node").forEach(node => {
         if (node !== head && node.classList.contains("visible-node")) {
@@ -111,14 +109,13 @@ function setToPpoistion() {
 
             // Calculate a weighted distance combining the center and head position
             let distance = Math.sqrt(
-                Math.pow(nodePosition.x - (headPosition.x + containerCenter.x) / 2, 2) +
-                Math.pow(nodePosition.y - (headPosition.y + containerCenter.y) / 2, 2)
+                Math.pow(nodePosition.x - (headPosition.x + 10), 2) +
+                Math.pow(nodePosition.y - (headPosition.y + 10), 2) // + 10 just for little bias towards topmost node
             );
 
-            if (distance < minDistance || (distance === minDistance && nodePosition.y < closestNodePosition.y)) {
+            if (distance < minDistance) {
                 minDistance = distance;
                 closestNode = node;
-                closestNodePosition = nodePosition; // Track position for tie-breaking
             }
         }
     });
@@ -126,6 +123,7 @@ function setToPpoistion() {
     // Adjust head's y-coordinate to match the closest node
     if (closestNode) {
         console.log(closestNode);
+        let closestNodePosition = getPosition(closestNode);
         let offsetY = closestNodePosition.y - headPosition.y; // Calculate the difference in y-coordinates
 
         // Ensure the head element has a valid position style
@@ -154,6 +152,7 @@ function connectChildren(parent, node) {
             }
         }
     }
+    setToPpoistion()
     setManySize()
 }
 
@@ -199,60 +198,9 @@ function showAll(node) {
     })
 }
 
-function intializeTopPosition() {
-    let head = document.querySelector(".tree-head");
-    let container = document.querySelector(".tree");
-
-    let headPosition = getPosition(head);
-
-    // Calculate the absolute center of the container
-    let containerCenter = {
-        x: container.offsetLeft + container.offsetWidth / 2,
-        y: container.offsetTop + container.offsetHeight / 2
-    };
-
-    let closestNode = null;
-    let minDistance = Infinity;
-
-    document.querySelectorAll(".tree-node").forEach(node => {
-        if (node.classList.contains("visible-node")) {
-            let nodePosition = getPosition(node);
-
-            // Calculate the distance to the center
-            let distance = Math.sqrt(
-                Math.pow(nodePosition.x - containerCenter.x, 2) +
-                Math.pow(nodePosition.y - containerCenter.y, 2)
-            );
-
-            if (distance < minDistance) {
-                minDistance = distance;
-                closestNode = node;
-            }
-        }
-    });
-
-    // Adjust head's position to match the closest node
-    if (closestNode) {
-        let closestNodePosition = getPosition(closestNode);
-        let offsetY = closestNodePosition.y - headPosition.y; // Calculate the difference in y-coordinates
-
-        // Ensure the head element has a valid position style
-        if (window.getComputedStyle(head).position === "static") {
-            head.style.position = "relative";
-        }
-
-        // Get current top value and ensure it's valid
-        let currentTop = parseFloat(window.getComputedStyle(head).top) || 0; // Default to 0 if invalid
-        head.style.top = `${currentTop + offsetY}px`; // Adjust head's position
-    }
-}
-
 function showDescription(node) {
     let descriptionBox = document.querySelector(".descriptionBox")
     descriptionBox.innerHTML = node.getAttribute("verbose")
 }
 window.addEventListener('resize', setManySize)
-window.addEventListener('load', () => {
-    intializeTopPosition();
-    main();
-});
+window.addEventListener('load', main);
