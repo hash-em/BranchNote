@@ -62,6 +62,15 @@ class tree():
         else:
             return max_depth
 
+    def depth(self,node_head:str,node=None):
+        if node is None :
+            node = self
+        if node.head == node_head: return len(node.children)
+        elif node.children :
+            for child in node.children :
+                child_count = self.depth(node_head,child)
+                if (child_count) : return child_count
+
     def addDetails(self,head,details,verbose,node=None):
         if node == None:
             node = self
@@ -75,17 +84,19 @@ class tree():
                     child.verbose = verbose
                 elif child.children :
                     self.addDetails(head,details,verbose,child)
-    def parentOf(self,child,node=None,level=1):
+    def parentOf(self,child,node=None,level=1,result=None):
         """assuming level 0 is the tree head itself any deeper branching is one deeper level \n
         i.e direct children are level 1 , direct grandchildren are level 2 , etc ..."""
         if node == None: node = self
-        if node.children:
+        if node.children and not (result):
             for subnode in node.children:
                 if subnode.head == child :
-                    return (node.head,level)
-            for subnode in node.children:
-                if subnode.children :
-                    return self.parentOf(child,subnode,level + 1)
+                    result = (node.head,level)
+                    return result
+                #elif subnode.children :
+                result = self.parentOf(child,subnode,level+1,result)
+                if (result) : return result
+
 
 
 
@@ -127,9 +138,9 @@ def markdownTree(file):
         elif hashtag_count > current_level :
             # subheader happened
             new_tree.addChild(next_head,title)
-            new_tree.addDetails(title,details,verbose)
+            new_tree.addDetails(title,details,markdown(verbose))
             recursiveChildren(lines[child_end+3:].strip(),new_tree,next_head,hashtag_count,title)
-        elif hashtag_count < current_level and current_level > 0 :
+        elif hashtag_count < current_level and hashtag_count > 0 :
             # bigger header happened
             grandparent = new_tree.parentOf(current_node_head)
             previous_head = grandparent[0]
@@ -138,16 +149,12 @@ def markdownTree(file):
     recursiveChildren(lines,new_tree,title,1,"")
     return new_tree
 
-
-file = open("test.md","r")
-markdownTree(file)
-file.close()
 def test():
-    new_tree = tree("this is title")
-    new_tree.addChild("this is title","child 1")
-    new_tree.addChildren("child 1","grandchild 1")
-    new_tree.addChildren("grandchild 1","big grandchild 1","big granchild 2")
+    new_tree = tree("title")
+    new_tree.addChildren("title","child 1","child 2","child 3","child 4")
+    new_tree.addChildren("child 1","grandchild 1","grandchild 2")
+    new_tree.addChild("grandchild 1","grand grandchild 1")
+    new_tree.addChildren("child 3","foo","bar")
     new_tree.addChild("this is title","child 2")
-    new_tree.addChild("child 2","gcc")
-    new_tree.decsribe()
-    print(new_tree.parentOf("child 2"))
+    print(new_tree.depth("foo"))
+test()

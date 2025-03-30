@@ -4,7 +4,7 @@
 verbose lorem impum title verbose tree
 
 ---
-# First child
+# First child what
 ==descirption of first child==
 # The verbose header of first child
 the verbose content of first child
@@ -14,9 +14,7 @@ the verbose content of first child
 ## First grandchild
 
 ==descirption of first granchild==
-
-# the verbose header of first grandchild
-
+## the verbose header of first grandchild
 more verbose content of first granchild
 
 ---
@@ -25,6 +23,20 @@ more verbose content of first granchild
 ==test==
 
 test
+
+---
+#### riske node
+==yes==
+
+ofc
+
+---
+
+#### last on istg
+
+==istg==
+
+wallah
 
 ---
 ## second granchild
@@ -44,7 +56,7 @@ more verbose content of second grandchild
 
 ---
 
-# third grandchild
+# third child
 
 ==his grand description==
 
@@ -52,7 +64,7 @@ some more text about third grandchild
 
 ---
 
-## foo
+## 3rd's son one
 
 ==bar==
 
@@ -60,17 +72,22 @@ ban
 
 ---
 
-## dooby
+### 3rd's grandchild
 
+==test==
 
-==probelm if dooby is ###==
+lull
 
-why
+---
+## 3rd's second one
+
+==you know==
+
+cmoon
 
 ---
 
-# fourth nigga
 
-==damn mf==
+and descriptions
 
----
+and so on and so on

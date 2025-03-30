@@ -5,7 +5,7 @@
 function main() {
 
     let tree_head = document.querySelector(".tree-head")
-    tree_head.addEventListener("click", () => { showAll(tree_head), showDescription(tree_head) })
+    tree_head.addEventListener("click", () => { showAll(tree_head), showDescription(tree_head), setManySize() })
     let node = document.querySelector(".tree-body")
     connectChildren(tree_head, node)
 }
@@ -17,7 +17,18 @@ function getPosition(el) {
     return pos;
 }
 
-let connections = []
+let connections = [];
+
+function toggle(node) {
+
+    focusOn(node)
+    let parent_connection = connections.find((connection) => connection.parent == node)
+    if (parent_connection != undefined) {
+        showAll(node)
+    }
+    showDescription(node)
+    setManySize()
+}
 
 function connectDots(dot_a, dot_b) {
 
@@ -53,9 +64,9 @@ function setSize(connection) {
     svg.setAttribute("style", "position:absolute; z-index: 10;");
 
     line.setAttribute("x1", a.x + a.node.offsetWidth);
-    line.setAttribute("y1", a.y + 22);
+    line.setAttribute("y1", a.y + 20);
     line.setAttribute("x2", b.x);
-    line.setAttribute("y2", b.y + 22); // 22 accounts for padding
+    line.setAttribute("y2", b.y + 20); // 22 accounts for padding
     line.setAttribute("stroke", "black");
     line.setAttribute("stroke-width", "2");
     line.setAttribute("vector-effect", "non-scaling-stroke"); // Ensure consistent stroke width
@@ -63,37 +74,7 @@ function setSize(connection) {
 
 function setManySize() {
 
-    let head = document.querySelector(".tree-head");
-
-    let headPosition = getPosition(head);
-    let closestNode = null;
-    let minDistance = Infinity;
-
-    document.querySelectorAll(".tree-node").forEach(node => {
-        if (node !== head && node.classList.contains("visible-node")) {
-            let nodePosition = getPosition(node);
-            let distance = Math.sqrt(
-                Math.pow(nodePosition.x - headPosition.x, 2) +
-                Math.pow(nodePosition.y - headPosition.y, 2)
-            );
-            if (distance < minDistance) {
-                minDistance = distance;
-                closestNode = node;
-            }
-        }
-    });
-
-    // Adjust head's y-coordinate to match the closest node
-    if (closestNode) {
-        console.log(closestNode)
-        let closestNodePosition = getPosition(closestNode);
-        let offsetY = closestNodePosition.y - headPosition.y; // Calculate the difference in y-coordinates
-        let currentTop = parseFloat(window.getComputedStyle(head).top) || 0; // Get current top value
-        head.style.top = `${currentTop + offsetY}px`; // Adjust head's position
-    }
-
-
-
+    setToPpoistion()
     document.querySelectorAll("svg").forEach(function (svg) { svg.setAttribute("display", "display") })
     connections.forEach(function (connection) {
         if (connection.child.classList.contains("visible-node")) {
@@ -104,6 +85,56 @@ function setManySize() {
             connection.svg.setAttribute("display", "none")
         }
     })
+}
+
+function setToPpoistion() {
+
+    let head = document.querySelector(".tree-head");
+    let container = document.querySelector(".tree");
+
+    let headPosition = getPosition(head);
+
+    // Calculate the absolute center of the container
+    let containerCenter = {
+        x: container.offsetLeft + container.offsetWidth / 2,
+        y: container.offsetTop + container.offsetHeight / 2
+    };
+
+    let closestNode = null;
+    let minDistance = Infinity;
+
+    document.querySelectorAll(".tree-node").forEach(node => {
+        if (node !== head && node.classList.contains("visible-node")) {
+            let nodePosition = getPosition(node);
+
+            // Calculate a weighted distance combining the center and head position
+            let distance = Math.sqrt(
+                Math.pow(nodePosition.x - (headPosition.x + containerCenter.x) / 2, 2) +
+                Math.pow(nodePosition.y - (headPosition.y + containerCenter.y) / 2, 2)
+            );
+
+            if (distance < minDistance) {
+                minDistance = distance;
+                closestNode = node;
+            }
+        }
+    });
+
+    // Adjust head's y-coordinate to match the closest node
+    if (closestNode) {
+        console.log(closestNode);
+        let closestNodePosition = getPosition(closestNode);
+        let offsetY = closestNodePosition.y - headPosition.y; // Calculate the difference in y-coordinates
+
+        // Ensure the head element has a valid position style
+        if (window.getComputedStyle(head).position === "static") {
+            head.style.position = "relative";
+        }
+
+        // Get current top value and ensure it's valid
+        let currentTop = parseFloat(window.getComputedStyle(head).top) || 0; // Default to 0 if invalid
+        head.style.top = `${currentTop + offsetY}px`; // Adjust head's position
+    }
 }
 
 function connectChildren(parent, node) {
@@ -125,15 +156,7 @@ function connectChildren(parent, node) {
 }
 
 
-function toggle(node) {
-    focusOn(node)
-    let parent_connection = connections.find((connection) => connection.parent == node)
-    if (parent_connection != undefined) {
-        showAll(node)
-    }
-    showDescription(node)
-    setManySize()
-}
+
 
 function focusOn(node) {
     node_div = node.parentNode;
@@ -155,7 +178,6 @@ function focusOn(node) {
 
     }
 
-    setManySize();
 }
 
 function showAll(node) {
@@ -173,7 +195,6 @@ function showAll(node) {
 
         }
     })
-    setManySize()
 }
 
 function showDescription(node) {

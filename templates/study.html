@@ -5,7 +5,7 @@
 
 <div class="container-fluid">
     <div class="row">
-        <main class="col-md-8 container graph-display px-3 py-0">
+        <main class="col-md-7 container graph-display px-3 py-0">
             <!-- Markdown content will be displayed here -->
             <!-- Basic tree search  -->
             {% if tree %}
@@ -14,7 +14,8 @@
                 <div id="{{ tree.head }}" class="tree-node visible-node tree-head"
                     verbose="{% if tree.verbose %}{{ tree.verbose }}{% endif %}" details="{{ tree.details }}">
 
-                    <div class="symbol">{{tree.head}} <span class="badge bg-primary">Head</span></div>
+                    <div class="symbol">{{tree.head}} <span class="badge visible_count bg-primary">
+                            {{tree.depth(tree.head)}}</span></div>
                     <div class="details">{{ tree.details }}</div>
                 </div>
                 <div id="{{tree.head}}" class="tree-body branch-children" style="z-index: 10;">
@@ -24,11 +25,16 @@
                         <div class="tree-node visible-node" id="{{node.head}}"
                             verbose="{% if node.verbose %}{{ node.verbose }}{% endif %}" details="{{ node.details}}">
                             <div class="symbol">{{ node.head }}
+
                                 <span
                                     class="position-absolute top-50 start-0 translate-middle p-2 border border-light rounded-circle node-link">
                                     <span class="visually-hidden">New alerts</span>
                                 </span>
+                                {% set depth = node.depth(node.head) %}
+                                {% if depth > 1 %}
+                                <span title="children count" class="badge bg-primary child_count">{{depth}} </span>
 
+                                {% endif %}
                             </div>
                             <div class="details">{{ node.details | safe }}</div>
                         </div>
@@ -68,7 +74,7 @@
                 <!-- Add menu items here -->
 
         </main>
-        <div class="col-md-4 descriptionBox">
+        <div class="col-md-5 descriptionBox">
             {{tree.verbose | safe}}
         </div>
 
