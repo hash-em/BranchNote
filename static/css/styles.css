@@ -42,30 +42,75 @@ body.dark-purple .tree-node .details {
     border-color: #30363d;
 }
 
+.col {
+    height: 90vh;
+    justify-content: space-between;
+    /* grid taht baa3dhou , flex : bjnab ba3dhou */
+}
 
-.container,
+.col.horizontal {
+    display: flex;
+}
+
+.col.vertical {
+    display: grid;
+}
+
+img {
+    width: 100%;
+    height: 20%;
+}
+
 .descriptionBox {
     position: relative;
     overflow: scroll !important;
-    height: 70vh;
     background-color: #ffffff;
     border: 1px solid #dee2e6;
     border-radius: 0.25rem;
     padding: 1rem;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    min-width: 48vw;
+    justify-self: center !important;
+    min-width: 600px;
 
 }
 
-.container {
-    display: grid;
+.descriptionBox.horizontal {
+    width: 40vw;
+    align-self: center;
 }
+
+.descriptionBox.vertical {
+    justify-self: center;
+    width: 50vw;
+}
+
+.graph-display.horizontal {
+    width: 50vw;
+}
+
+.graph-display.vertical {
+    justify-self: center;
+    width: 100vw;
+    overflow-y: visible;
+}
+
+.descriptionBox .read {
+    text-wrap: wrap;
+    overflow-x: hidden;
+    /* center to put in center */
+    width: 100% !important;
+}
+
+
+
 
 
 .graph-display {
     align-self: center;
-    overflow: visible;
-    /* height: fit-content;
-    padding-bottom: 80px;
+    height: fit-content;
+    width: fit-content;
+
     /* here remove padding and fir content to return normal*/
 }
 
@@ -104,9 +149,7 @@ aside {
     padding: 1rem;
 }
 
-.container-fluid {
-    padding: 2rem;
-}
+
 
 button.btn {
     background-color: #007bff;
@@ -128,7 +171,7 @@ button.btn:hover {
     align-content: center;
     align-items: center;
     display: grid;
-    width: 100%;
+    width: 100vw;
     height: 100%;
     overflow: visible !important;
 }
@@ -140,6 +183,7 @@ button.btn:hover {
 .tree {
     position: relative;
     align-content: center;
+    justify-content: center;
     display: flex;
     gap: 1rem;
     align-items: center;
@@ -184,7 +228,7 @@ button.btn:hover {
 
 
 .tree-node:hover .details {
-    opacity: 100%;
+    opacity: 90%;
 }
 
 .tree-node .details {
@@ -270,6 +314,11 @@ button.btn:hover {
     box-shadow: 0 0 12px rgba(0, 86, 179, 0.8);
 }
 
+.active-link {
+    background-color: #0056b3;
+    box-shadow: 0 0 12px rgba(0, 86, 179, 0.8);
+}
+
 .tree-node,
 .leaf,
 .node-link {
@@ -318,6 +367,7 @@ button.btn:hover {
     border-bottom: 10px solid #90caf9 !important;
     /* Triangle pointing upwards */
     border-top: none;
+    opacity: 80%;
     /* Remove the previous top border */
 }
 
@@ -327,6 +377,7 @@ button.btn:hover {
     display: block;
     width: 100%;
     box-sizing: border-box;
+    opacity: 80%;
 
 }
 
@@ -369,4 +420,50 @@ button.btn:hover {
     /* Remove the previous right border */
     border-top: 10px solid transparent;
     border-bottom: 10px solid transparent;
+}
+
+.scroll-top {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    z-index: 1000;
+    /* Initially hidden */
+}
+
+.scroll-top:hover {
+    background-color: #0056b3;
+}
+
+.navbar {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1rem;
+}
+
+.navbar-brand {
+    font-weight: bold;
+    color: #007bff !important;
+}
+
+.navbar-nav .nav-link {
+    color: #6c757d !important;
+    transition: color 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #0056b3 !important;
+}
+
+.navbar-toggler {
+    border-color: #dee2e6;
+}
+
+.navbar-toggler-icon {
+    background-color: #6c757d;
+    border-radius: 2px;
 }

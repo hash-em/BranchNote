@@ -17,16 +17,15 @@
 
 <body class="">
 
-  <nav class="navbar navbar-expand-lg">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
-      <img src="" alt="Logo">
+      <a class="navbar-brand" href="#">Home</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
-          <!-- generate appropriate menu-->
           {% if not session["user_id"] %}
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="/us">Startodo</a>
@@ -55,6 +54,17 @@
           </li>
           {% endif %}
         </ul>
+        <!-- Search bar with datalist -->
+        <form class="d-flex ms-auto" action="/study" method="POST">
+          <input class="form-control me-2" list="search-options" type="search" name="query"
+            placeholder="Example : # todo jinja py list" aria-label="Search">
+          <datalist id="search-options">
+            <option value="Option 1">
+            <option value="Option 2">
+            <option value="Option 3">
+          </datalist>
+          <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
       </div>
     </div>
   </nav>

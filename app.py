@@ -75,17 +75,8 @@ def logout():
 @app.route("/study", methods=["GET","POST"])
 @login_required
 def display_study():
-    """
-    test = tree("final")
-    test.addChildren("final","plumbus","omni","foo")
-    test.addChildren("omni","man")
-    test.addChildren("plumbus",'morty','rick')
-    test.addChild("morty","jessica")
-    test.addChild("jessica","friend")
-    test.addChildren("foo","bar")
-    test.addChild("friend","of a friend")
-    test.addChildren("man","child","female")"""
-    file = open("test.md","r")
+
+    file = open("markdown/solar.md","r")
     test = markdownTree(file)
     file.close
     tags = {}
@@ -94,16 +85,14 @@ def display_study():
     # TODO remove this
     todo = ["this",'that',"those"]
     if request.method == "GET":
-        return render_template("study.html",todo = todo,tree = test)
+        return render_template("markdown.html",todo = todo,tree = test)
     else:
         query = request.form.get("query")
         try :
-            with open(f"exercices/{query}.md","r") as file:
-                exercice = file.read()
-                tags,exercice = extract_tags(exercice)
-                exercice = markdown(exercice)
-
-            return render_template("study.html", todo=todo, exercice = exercice, tags = tags , name = query, tree=test)
+            flash(query)
+            with open(f"markdown/{query}.md","r") as file:
+                content = markdownTree(file)
+            return render_template("markdown.html", tags = tags , name = query, tree=content)
         except :
             flash("couldn't find")
             return redirect("/study")
@@ -111,8 +100,9 @@ def display_study():
 
 @app.get("/create")
 def create():
-# try to include a way to save progress in session somehow
-    return render_template("create.html")
+    with  open("markdown/create.md","r") as createMd :
+        create_tree = markdownTree(createMd)
+        return render_template("markdown.html",tree=create_tree)
 
 
 

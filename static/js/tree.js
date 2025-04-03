@@ -21,6 +21,10 @@ let connections = [];
 
 function toggle(node) {
 
+    let nodeLink = node.parentNode.querySelector(".node-link");
+    if (nodeLink) {
+        nodeLink.classList.add("active-link");
+    }
     focusOn(node)
     let parent_connection = connections.find((connection) => connection.parent == node)
     if (parent_connection != undefined) {
@@ -109,8 +113,8 @@ function setToPpoistion() {
 
             // Calculate a weighted distance combining the center and head position
             let distance = Math.sqrt(
-                Math.pow(nodePosition.x - (headPosition.x + 10), 2) +
-                Math.pow(nodePosition.y - (headPosition.y + 10), 2) // + 10 just for little bias towards topmost node
+                //Math.pow(nodePosition.x - (headPosition.x + 10), 2) + // to also include closest X axis
+                Math.pow(nodePosition.y - (headPosition.y), 2) // + 10 to headPosition just for little bias towards topmost node
             );
 
             if (distance < minDistance) {
@@ -189,6 +193,7 @@ function showAll(node) {
             let subnodes = connection.parent.parentNode.querySelector(".branch-children").querySelectorAll(".tree-node")
             if (subnodes != null) {
                 subnodes.forEach(function (subnode) {
+                    subnode.parentNode.querySelector(".node-link").classList.remove("active-link");
                     subnode.parentNode.setAttribute("style", "display:")
                     subnode.classList.add("visible-node")
                 })
@@ -199,8 +204,33 @@ function showAll(node) {
 }
 
 function showDescription(node) {
-    let descriptionBox = document.querySelector(".descriptionBox")
-    descriptionBox.innerHTML = node.getAttribute("verbose")
+    let readBox = document.querySelector(".read")
+    readBox.innerHTML = node.getAttribute("verbose")
+}
+
+function swapTreeDirection() {
+    container = document.querySelector(".col")
+    descBox = document.querySelector(".descriptionBox")
+    graph = document.querySelector(".graph-display")
+    console.log(container)
+    if (container.classList.contains("horizontal")) {
+        descBox.classList.remove("horizontal")
+        descBox.classList.add("vertical")
+        graph.classList.remove("horizontal")
+        graph.classList.add("vertical")
+        container.classList.remove("horizontal")
+        container.classList.add("vertical")
+
+    }
+    else {
+        container.classList.add("horizontal")
+        container.classList.remove("vertical")
+        descBox.classList.add("horizontal")
+        descBox.classList.remove("vertical")
+        graph.classList.add("horizontal")
+        graph.classList.remove("vertical")
+    }
+    setManySize()
 }
 window.addEventListener('resize', setManySize)
 window.addEventListener('load', main);
