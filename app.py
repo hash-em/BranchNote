@@ -9,6 +9,7 @@ import os
 app = Flask(__name__)
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
+app.config['UPLOAD_FOLDER'] = "markdown/"
 Session(app)
 # SQL CONNECTION
 
@@ -106,6 +107,15 @@ def dashboard():
     filelist = os.listdir("markdown")
     print("test",filelist)
     return render_template("dashboard.html",files=filelist, username=session["username"])
+
+@app.post("/dashboard")
+def addNewfile():
+    markdown = request.files["markdown"]
+    if markdown:
+        markdown.save(os.path.join(app.config['UPLOAD_FOLDER'], markdown.filename))
+        with open (f"markdown/{markdown.filename}","r") as file:
+            return render_template("markdown.html", tree=markdownTree(file))
+
 
 @app.errorhandler(404)
 def not_found(e):

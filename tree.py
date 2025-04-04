@@ -164,4 +164,3 @@ def test():
     new_tree.addChildren("child 3","foo","bar")
     new_tree.addChild("this is title","child 2")
     print(new_tree.depth("foo"))
-test()
