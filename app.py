@@ -4,6 +4,7 @@ from db import conn_params,password_hash,login_required,session_collect,db,conne
 from markdown import markdown
 from helpers import extract_tags
 from tree import tree,markdownTree,markdownTree
+import os
 # FLASK #INTIALISATION
 app = Flask(__name__)
 app.config["SESSION_PERMANENT"] = False
@@ -75,7 +76,7 @@ def logout():
 @app.route("/study", methods=["GET","POST"])
 @login_required
 def display_study():
-
+    # suggestion = #TODO
     file = open("markdown/solar.md","r")
     test = markdownTree(file)
     file.close
@@ -85,14 +86,16 @@ def display_study():
     # TODO remove this
     todo = ["this",'that',"those"]
     if request.method == "GET":
-        return render_template("markdown.html",todo = todo,tree = test)
+        return render_template("markdown.html",tree = test)
     else:
         query = request.form.get("query")
+        extension = query.find(".md")
+        if extension!= -1 : query = query[0:extension]
         try :
-            flash(query)
+
             with open(f"markdown/{query}.md","r") as file:
                 content = markdownTree(file)
-            return render_template("markdown.html", tags = tags , name = query, tree=content)
+            return render_template("markdown.html", tree=content)
         except :
             flash("couldn't find")
             return redirect("/study")
@@ -105,7 +108,11 @@ def create():
         return render_template("markdown.html",tree=create_tree)
 
 
-
+@app.get("/dashboard")
+def dashboard():
+    filelist = os.listdir("markdown")
+    print("test",filelist)
+    return render_template("dashboard.html",files=filelist, username=session["username"])
 
 @app.errorhandler(404)
 def not_found(e):

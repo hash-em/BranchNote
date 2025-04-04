@@ -78,7 +78,7 @@ function setSize(connection) {
 
 function setManySize() {
 
-    setToPpoistion()
+    setTopPosition()
     document.querySelectorAll("svg").forEach(function (svg) { svg.setAttribute("display", "display") })
     connections.forEach(function (connection) {
         if (connection.child.classList.contains("visible-node")) {
@@ -91,12 +91,13 @@ function setManySize() {
     })
 }
 
-function setToPpoistion() {
+function setTopPosition() {
 
     let head = document.querySelector(".tree-head");
     let container = document.querySelector(".tree");
-
+    let graph = document.querySelector(".graph-container")
     let headPosition = getPosition(head);
+    //graph.setAttribute("left", `50px !important`)
 
     // Calculate the absolute center of the container
     let containerCenter = {
@@ -126,7 +127,6 @@ function setToPpoistion() {
 
     // Adjust head's y-coordinate to match the closest node
     if (closestNode) {
-        console.log(closestNode);
         let closestNodePosition = getPosition(closestNode);
         let offsetY = closestNodePosition.y - headPosition.y; // Calculate the difference in y-coordinates
 
@@ -156,7 +156,7 @@ function connectChildren(parent, node) {
             }
         }
     }
-    setToPpoistion()
+    setTopPosition()
     setManySize()
 }
 
@@ -212,7 +212,6 @@ function swapTreeDirection() {
     container = document.querySelector(".col")
     descBox = document.querySelector(".descriptionBox")
     graph = document.querySelector(".graph-display")
-    console.log(container)
     if (container.classList.contains("horizontal")) {
         descBox.classList.remove("horizontal")
         descBox.classList.add("vertical")
@@ -232,5 +231,10 @@ function swapTreeDirection() {
     }
     setManySize()
 }
+
+
+
 window.addEventListener('resize', setManySize)
-window.addEventListener('load', main);
+window.addEventListener('load', () => {
+    main();
+});

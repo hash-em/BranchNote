@@ -2,6 +2,8 @@ body {
     font-family: 'Arial', sans-serif;
     background-color: #f0f2f5;
     transition: background-color 0.3s ease, color 0.3s ease;
+    padding-left: 0 !important;
+    overflow: hidden;
 }
 
 body.dark-purple,
@@ -43,6 +45,7 @@ body.dark-purple .tree-node .details {
 }
 
 .col {
+    position: relative;
     height: 90vh;
     justify-content: space-between;
     /* grid taht baa3dhou , flex : bjnab ba3dhou */
@@ -69,10 +72,6 @@ img {
     border-radius: 0.25rem;
     padding: 1rem;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    min-width: 48vw;
-    justify-self: center !important;
-    min-width: 600px;
-
 }
 
 .descriptionBox.horizontal {
@@ -81,32 +80,88 @@ img {
 }
 
 .descriptionBox.vertical {
+    height: fit-content;
     justify-self: center;
     width: 50vw;
+    min-width: 500px;
 }
 
+
 .graph-display.horizontal {
-    width: 50vw;
+    width: 58vw;
+    position: relative;
+    /* Align content to the left */
+    overflow: visible;
+    z-index: 0;
 }
 
 .graph-display.vertical {
-    justify-self: center;
+    align-self: center;
     width: 100vw;
     overflow-y: visible;
 }
 
 .descriptionBox .read {
-    text-wrap: wrap;
-    overflow-x: hidden;
-    /* center to put in center */
-    width: 100% !important;
+    font-family: 'Georgia', serif;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #333333;
+    background-color: none;
+    padding: 1.5rem;
+
+    text-align: justify;
+    transition: all 0.5s;
+    max-height: 70vh;
 }
 
+.descriptionBox .read:hover {
+    transform: translateY(-0.5%)scale(1.01);
+}
 
+.descriptionBox .read h1,
+.descriptionBox .read h2,
+.descriptionBox .read h3 {
+    color: #0056b3;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+}
 
+.descriptionBox .read p {
+    margin-bottom: 1rem;
+}
 
+.descriptionBox .read a {
+    color: #007bff;
+    text-decoration: underline;
+}
+
+.descriptionBox .read a:hover {
+    color: #0056b3;
+    text-decoration: none;
+}
+
+.descriptionBox .read blockquote {
+    font-style: italic;
+    color: #555555;
+    border-left: 4px solid #007bff;
+    padding-left: 1rem;
+    margin: 1rem 0;
+    background-color: #f9f9f9;
+}
+
+.descriptionBox .read ul,
+.descriptionBox .read ol {
+    margin: 1rem 0;
+    padding-left: 2rem;
+}
+
+.descriptionBox .read ul li,
+.descriptionBox .read ol li {
+    margin-bottom: 0.5rem;
+}
 
 .graph-display {
+
     align-self: center;
     height: fit-content;
     width: fit-content;
@@ -423,10 +478,9 @@ button.btn:hover {
 }
 
 .scroll-top {
-    position: fixed;
-    bottom: 20px;
+    position: absolute;
+    top: -10px;
     right: 20px;
-    background-color: #007bff;
     color: white;
     border: none;
     border-radius: 5px;
@@ -436,9 +490,7 @@ button.btn:hover {
     /* Initially hidden */
 }
 
-.scroll-top:hover {
-    background-color: #0056b3;
-}
+
 
 .navbar {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);

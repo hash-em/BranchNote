@@ -126,9 +126,9 @@ def markdownTree(file):
         if lines == "" : return
         title_level = titleLevel(lines[:lines.find("\n")])
         hashtag_count,title = title_level[0],title_level[1].strip()
-        details_start =lines.find("==")
-        details_end = lines.find("==",details_start+2)
         child_end = lines.find("---")
+        details_start =lines.find("==",0,child_end)
+        details_end = lines.find("==",details_start+2,child_end)
         if details_end!= -1 and details_start != -1 :
             # if exists a description
             details = lines[details_start+2:details_end]
