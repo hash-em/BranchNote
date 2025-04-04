@@ -18,7 +18,7 @@ Session(app)
 @app.route("/")
 @login_required
 def index():
-    return render_template("index.html")
+    return redirect("/dashboard")
 #LOGIN Handling
 @app.get("/login")
 def render_login():
@@ -77,16 +77,9 @@ def logout():
 @login_required
 def display_study():
     # suggestion = #TODO
-    file = open("markdown/solar.md","r")
-    test = markdownTree(file)
-    file.close
-    tags = {}
-    db.execute("SELECT * FROM travail WHERE user_id = ? AND done = 'n'",(session["user_id"],))
-    todo = db.fetchmany()
-    # TODO remove this
-    todo = ["this",'that',"those"]
     if request.method == "GET":
-        return render_template("markdown.html",tree = test)
+        flash("choose a note")
+        return redirect("/dashboard")
     else:
         query = request.form.get("query")
         extension = query.find(".md")
