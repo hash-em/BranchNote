@@ -110,10 +110,12 @@ def markdownTree(file):
     lines:str = file.read()
     title = lines[1:lines.find("\n")].strip()
     new_tree = tree(title)
-    details_start =lines.find("==")
-    details_end = lines.find("==",details_start+2)
     verbose_end = lines.find("---")
-    details,verbose = lines[details_start+2:details_end], lines[details_end+2:verbose_end]
+    details_start =lines.find("==",0,verbose_end)
+    details_end = lines.find("==",details_start+2,verbose_end)
+    if details_start != -1  : details= lines[details_start+2:details_end]
+    else : details = None
+    verbose =  lines[details_end+2:verbose_end]
     new_tree.addDetails(title,details,markdown(verbose))
     lines = lines[verbose_end+3:].strip()
     def titleLevel(header):

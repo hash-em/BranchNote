@@ -86,10 +86,10 @@ def display_study():
         extension = query.find(".md")
         if extension!= -1 : query = query[0:extension]
         try :
-
+            filenames = os.listdir("markdown")
             with open(f"markdown/{query}.md","r") as file:
                 content = markdownTree(file)
-            return render_template("markdown.html", tree=content)
+            return render_template("markdown.html", tree=content, filenames=filenames)
         except :
             flash("couldn't find")
             return redirect("/study")
@@ -105,7 +105,6 @@ def create():
 @app.get("/dashboard")
 def dashboard():
     filelist = os.listdir("markdown")
-    print("test",filelist)
     return render_template("dashboard.html",files=filelist, username=session["username"])
 
 @app.post("/dashboard")

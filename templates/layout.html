@@ -52,17 +52,73 @@
           </li>
           {% endif %}
         </ul>
-        <!-- Search bar with datalist -->
+        <!-- Search bar with datalist// search bar vibe coded ( :( ))-->
         <form class="d-flex ms-auto" action="/study" method="POST">
-          <input class="form-control me-2" list="search-options" type="search" name="query"
-            placeholder="Example : # todo jinja py list" aria-label="Search">
-          <datalist id="search-options">
-            <option value="Option 1">
-            <option value="Option 2">
-            <option value="Option 3">
-          </datalist>
+          <div class="dropdown w-100">
+            <input class="form-control dropdown-toggle me-2" id="dropdownSearch" type="search" name="query"
+              placeholder="Example : # todo jinja py list" aria-label="Search" data-bs-toggle="dropdown"
+              aria-expanded="false" oninput="filterOptions()" onkeydown="navigateOptions(event)">
+            <ul class="dropdown-menu w-100" id="dropdownOptions" aria-labelledby="dropdownSearch">
+              {% if filenames %}
+              {% for filename in filenames %}
+              <li><button class="dropdown-item" type="button"
+                  onclick="selectOption('{{filename[0:-3]}}')">{{filename[0:-3]}}</button></li>
+              {% endfor %}
+              {% endif %}
+            </ul>
+          </div>
           <button class="btn btn-outline-success" type="submit">Search</button>
         </form>
+        <script>
+          let currentIndex = -1;
+
+          function selectOption(value) {
+            document.getElementById('dropdownSearch').value = value;
+            currentIndex = -1; // Reset index after selection
+          }
+
+          function filterOptions() {
+            const input = document.getElementById('dropdownSearch').value.toLowerCase();
+            const options = document.querySelectorAll('#dropdownOptions .dropdown-item');
+            let visibleCount = 0;
+            options.forEach(option => {
+              const text = option.textContent.toLowerCase();
+              if ((text.includes(input) || input === '') && visibleCount < 5) {
+                option.style.display = 'block';
+                visibleCount++;
+              } else {
+                option.style.display = 'none';
+              }
+            });
+            currentIndex = -1; // Reset index when filtering
+          }
+
+          function navigateOptions(event) {
+            const options = Array.from(document.querySelectorAll('#dropdownOptions .dropdown-item'))
+              .filter(option => option.style.display !== 'none');
+            if (event.key === 'ArrowDown') {
+              event.preventDefault();
+              currentIndex = (currentIndex + 1) % options.length;
+              highlightOption(options);
+            } else if (event.key === 'ArrowUp') {
+              event.preventDefault();
+              currentIndex = (currentIndex - 1 + options.length) % options.length;
+              highlightOption(options);
+            } else if (event.key === 'Enter' && currentIndex >= 0) {
+              event.preventDefault();
+              options[currentIndex].click();
+            }
+          }
+
+          function highlightOption(options) {
+            options.forEach((option, index) => {
+              option.classList.toggle('active', index === currentIndex);
+            });
+            if (currentIndex >= 0) {
+              options[currentIndex].scrollIntoView({ block: 'nearest' });
+            }
+          }
+        </script>
       </div>
     </div>
   </nav>
