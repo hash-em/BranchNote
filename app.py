@@ -91,7 +91,7 @@ def display_study():
                 filepath =f"markdown/demo/{query}.md"
             else :
                 filepath =f"markdown/{session['username']}/{query}.md"
-            with open(filepath,"r") as file:
+            with open(filepath,"r",encoding="utf-8",errors="replace") as file:
                 content = markdownTree(file)
             return render_template("markdown.html", tree=content, filenames=filenames)
         except :
@@ -119,7 +119,7 @@ def addNewfile():
     if markdown:
 
         markdown.save(os.path.join(f"markdown/{session['username']}/",markdown.filename))
-        with open (f"markdown/{session['username']}/{markdown.filename}","r") as file:
+        with open (f"markdown/{session['username']}/{markdown.filename}","r",encoding="utf-8",errors="replace") as file:
             return render_template("markdown.html", tree=markdownTree(file))
 
 @app.get("/demo")
