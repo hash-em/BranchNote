@@ -3,7 +3,7 @@ body {
     background-color: #f0f2f5;
     transition: background-color 0.3s ease, color 0.3s ease;
     padding-left: 0 !important;
-    overflow: hidden;
+    overflow-x: hidden;
 }
 
 body.dark-purple,

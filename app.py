@@ -62,7 +62,7 @@ def register():
         db.execute("INSERT INTO users (username,subscription,hash,section,niveau) VALUES (?,'n',?,?,?)", (username,password,section,niveau))
         flash("Welcome !", category="success")
         db.execute("SELECT user_id FROM users WHERE username = ?", (username,))
-        session_collect(user_id = db.fetchone()["user_id"], username = username)
+        session_collect(user_id = db.fetchone()["user_id"], username = username, demo=False)
         os.mkdir(f"markdown/{session["username"]}")
         connection.commit()
         return redirect("/")
@@ -86,12 +86,17 @@ def display_study():
         extension = query.find(".md")
         if extension!= -1 : query = query[0:extension]
         try :
-            filenames = os.listdir("markdown")
-            with open(f"markdown/session[username']/{query}.md","r") as file:
+            filenames = os.listdir(f"markdown/{session['username']}")
+            if session.get("demo") == True :
+                session["demo"] = False
+                filepath =f"markdown/demo/{query}.md"
+            else :
+                filepath =f"markdown/{session['username']}/{query}.md"
+            with open(filepath,"r") as file:
                 content = markdownTree(file)
             return render_template("markdown.html", tree=content, filenames=filenames)
         except :
-            flash("couldn't find")
+            flash("couldn't find",filepath)
             return redirect("/study")
 
 
@@ -107,7 +112,7 @@ def dashboard():
     try:
         filelist = os.listdir(f"markdown/{session['username']}")
     except :
-        filelist = os.listdir("markdown/")
+        return redirect("/demo")
     return render_template("dashboard.html",files=filelist, username=session["username"])
 
 @app.post("/dashboard")
@@ -119,6 +124,11 @@ def addNewfile():
         with open (f"markdown/{session['username']}/{markdown.filename}","r") as file:
             return render_template("markdown.html", tree=markdownTree(file))
 
+@app.get("/demo")
+def demo():
+    session["demo"] = True
+    filelist = os.listdir("markdown/demo")
+    return render_template("dashboard.html",files=filelist, username=session["username"])
 
 @app.errorhandler(404)
 def not_found(e):
