@@ -46,11 +46,8 @@ def render_register():
     return render_template("register.html")
 @app.post("/register")
 def register():
-    section = request.form.get("section")
-    if section not in ["info","tech","math","sci"] : return redirect(404)
     username = request.form.get("username")
     password = password_hash(request.form.get("password"))
-    niveau = request.form.get("niveau")
     # check for username in database
     db.execute("SELECT username FROM users WHERE username = ?",(username,))
 
@@ -59,11 +56,14 @@ def register():
         flash(f"Username '{already_exists["username"]}' already in use")
         return redirect("/register")
     else :
-        db.execute("INSERT INTO users (username,subscription,hash,section,niveau) VALUES (?,'n',?,?,?)", (username,password,section,niveau))
+        db.execute("INSERT INTO users (username,hash) VALUES (?,?)", (username,password))
         flash("Welcome !", category="success")
         db.execute("SELECT user_id FROM users WHERE username = ?", (username,))
         session_collect(user_id = db.fetchone()["user_id"], username = username, demo=False)
-        os.mkdir(f"markdown/{session["username"]}")
+
+        try :
+            os.mkdir(f"markdown/{session["username"]}")
+        except: pass
         connection.commit()
         return redirect("/")
 
@@ -96,7 +96,6 @@ def display_study():
                 content = markdownTree(file)
             return render_template("markdown.html", tree=content, filenames=filenames)
         except :
-            flash("couldn't find",filepath)
             return redirect("/study")
 
 

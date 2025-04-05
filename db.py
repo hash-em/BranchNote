@@ -8,7 +8,7 @@ conn_params= {
     "user" : "root",
     "password" : "test123",
     "host" : "localhost",
-    "database" : "startoday"
+    "database" : "branchnotes"
 }
 
 connection= mariadb.connect(**conn_params)
