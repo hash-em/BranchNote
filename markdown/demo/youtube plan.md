@@ -1,6 +1,5 @@
 # calendar
 ==Overview of the plan==
-
 # Start of a journey
 Here is a basic calendar to start your YouTube channel in two weeks. Each section is divided by week, with subsections to organize the important steps.
 
