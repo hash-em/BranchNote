@@ -114,7 +114,7 @@ function setTopPosition() {
 
             // Calculate a weighted distance combining the center and head position
             let distance = Math.sqrt(
-                //Math.pow(nodePosition.x - (headPosition.x + 10), 2) + // to also include closest X axis
+                Math.pow(nodePosition.x - (headPosition.x + 10), 2) + // to also include closest X axis
                 Math.pow(nodePosition.y - (headPosition.y), 2) // + 10 to headPosition just for little bias towards topmost node
             );
 
