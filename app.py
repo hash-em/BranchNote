@@ -9,7 +9,6 @@ import os
 app = Flask(__name__)
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
-app.config['UPLOAD_FOLDER'] = "markdown/"
 Session(app)
 # SQL CONNECTION
 
@@ -64,6 +63,7 @@ def register():
         flash("Welcome !", category="success")
         db.execute("SELECT user_id FROM users WHERE username = ?", (username,))
         session_collect(user_id = db.fetchone()["user_id"], username = username)
+        os.mkdir(f"markdown/{session["username"]}")
         connection.commit()
         return redirect("/")
 
@@ -87,7 +87,7 @@ def display_study():
         if extension!= -1 : query = query[0:extension]
         try :
             filenames = os.listdir("markdown")
-            with open(f"markdown/{query}.md","r") as file:
+            with open(f"markdown/session[username']/{query}.md","r") as file:
                 content = markdownTree(file)
             return render_template("markdown.html", tree=content, filenames=filenames)
         except :
@@ -104,15 +104,19 @@ def create():
 
 @app.get("/dashboard")
 def dashboard():
-    filelist = os.listdir("markdown")
+    try:
+        filelist = os.listdir(f"markdown/{session['username']}")
+    except :
+        filelist = os.listdir("markdown/")
     return render_template("dashboard.html",files=filelist, username=session["username"])
 
 @app.post("/dashboard")
 def addNewfile():
     markdown = request.files["markdown"]
     if markdown:
-        markdown.save(os.path.join(app.config['UPLOAD_FOLDER'], markdown.filename))
-        with open (f"markdown/{markdown.filename}","r") as file:
+
+        markdown.save(os.path.join(f"markdown/{session['username']}/",markdown.filename))
+        with open (f"markdown/{session['username']}/{markdown.filename}","r") as file:
             return render_template("markdown.html", tree=markdownTree(file))
 
 
