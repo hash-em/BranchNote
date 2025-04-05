@@ -1,12 +1,18 @@
 {% extends "layout.html" %}
 
 {% block main %}
-<main class="d-flex align-items-center justify-content-center vh-100">
-    <div class="card shadow-lg p-4" style="width: 30rem;">
-        <h2 class="card-title text-center mb-4">Start Doing Today !</h2>
+<main class="d-flex align-items-center justify-content-center vh-100 text-center">
+    <div class="card shadow-lg p-4" style="width: 28rem; border-radius: 10px; top: -5%;">
+        <div class="d-flex align-items-center mb-1">
+            <div class="text-center" style="flex: 1;border-right: 2px solid #ddd; margin: 0px;">
+                <img src="/static/logo.png" style="width: 50%; height:fit-content;" alt="Logo">
+            </div>
+            <h2 class="card-title" style="flex: 1; margin: 0;">Register</h2>
+        </div>
+        <hr class="my-0 mb-4">
         <form action="/register" method="POST">
             <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="username" name="username" placeholder="username"
+                <input type="text" class="form-control" id="username" name="username" placeholder="Username"
                     value="{{ session['username'] | default('') }}" autocomplete="off" required>
                 <label for="username">Username</label>
             </div>
@@ -20,8 +26,7 @@
                     placeholder="Confirm Password" autocomplete="off" required>
                 <label for="confirmation">Confirm Password</label>
             </div>
-
-            <button class="btn btn-primary w-100" type="submit">Register</button>
+            <button class="btn btn-primary w-100" type="submit" style="border-radius: 5px;">Register</button>
         </form>
     </div>
 </main>

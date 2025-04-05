@@ -37,7 +37,6 @@ def login():
             flash("Incorrect Password !")
             return redirect("/login")
     else:
-        flash("Please register to use that username !")
         session["username"] = username
         return redirect("/register")
 
