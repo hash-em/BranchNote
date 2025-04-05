@@ -1,0 +1,609 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="/static/logo.png">
+    <title>BranchNote - calendar</title>
+    <script src="/static/js/scripts.js"></script>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <style>
+        #malStatus,
+        #malTotal,
+        #malEpisodes,
+        #malUserRating,
+        #malRating,
+        #malVolumes,
+        #malTotalVol,
+        #malTotalCha,
+        #AddMal {
+            color: black;
+        }
+
+        .mal-sync-active {
+            background-color: #98cff0;
+        }
+
+        #malp select option {
+            background-color: #111111;
+        }
+
+        #malp #malStatus,
+        #malp #malUserRating,
+        #malp #malEpisodes,
+        #malp #malVolumes,
+        #malp #malEpisodes {
+            font-size: inherit;
+            font-family: inherit;
+            background: transparent;
+            border-color: grey;
+            text-decoration: none;
+            outline: medium none;
+            border-width: 0;
+            height: auto;
+            padding: 0;
+            margin: 0;
+            line-height: 1;
+        }
+
+        #malp #malEpisodes,
+        #malp #malVolumes,
+        #malp #malEpisodes {
+            text-align: center;
+            border-bottom-width: 1px;
+        }
+
+        #malp #malEpisodes:focus,
+        #malp #malVolumes:focus,
+        #malp #malEpisodes:focus {
+            border-color: black;
+        }
+
+        #malSyncProgress.ms-loading {
+            height: 4px;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            background-color: #ddd;
+        }
+
+        #malSyncProgress.ms-loading::before {
+            display: block;
+            position: absolute;
+            content: '';
+            left: -200px;
+            width: 200px;
+            height: 4px;
+            background-color: #2980b9;
+            animation: loading-mal 2s linear infinite;
+        }
+
+        @keyframes loading-mal {
+            0% {
+                left: -200px;
+                width: 30%;
+            }
+
+            50% {
+                width: 30%;
+            }
+
+            70% {
+                width: 70%;
+            }
+
+            80% {
+                left: 50%;
+            }
+
+            95% {
+                left: 120%;
+            }
+
+            100% {
+                left: 100%;
+            }
+        }
+
+        #malSyncProgress.ms-done .ms-progress {
+            width: 100% !important;
+            background-color: #ff4081 !important;
+            transition: background-color 1s !important;
+        }
+
+        #malp {
+            margin: 0 0 30px;
+        }
+
+        #malp #MalData {
+            justify-content: flex-start !important;
+            align-items: stretch !important;
+            gap: 10px;
+        }
+
+        #malp #MalData .malp-group {
+            display: flex;
+            flex-direction: column !important;
+        }
+
+        #malp #MalData .malp-group>.malp-group-field,
+        #malp #MalData .malp-group>.malp-group-value-section {
+            flex-grow: 1;
+            background-color: #6868681c !important;
+            border-radius: 4px;
+            padding: 4px 8px !important;
+        }
+
+        #malp #MalData option {
+            background-color: #6868681c !important;
+        }
+
+        #malp #MalData .malp-group-label {
+            display: block !important;
+        }
+
+        #malp #MalData .malp-group-label {
+            display: block !important;
+            font-size: 12px !important;
+        }
+
+        #malp #MalData #AddMalDiv {
+            margin-left: 10px;
+            display: inline-block !important;
+            font-size: 0;
+            background-color: #6868681c !important;
+            border-radius: 4px;
+            padding: 4px 8px !important;
+        }
+
+        #malp #MalData #AddMalDiv #AddMal {
+            font-size: 16px;
+        }
+
+        #malp #MalData option {
+            color: white !important;
+            background-color: #474747 !important;
+        }
+
+        #malp span {
+            color: inherit;
+        }
+
+        #malRating,
+        #malStatus,
+        #malEpisodes,
+        #malUserRating,
+        #malVolumes,
+        #AddMal {
+            color: inherit;
+        }
+
+        /*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8uL3NyYy9wYWdlcy9wYWdlcy5sZXNzIiwid2VicGFjazovLy4vc3JjL3BhZ2VzL1N1d2F5b21pL3N0eWxlLmxlc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBSUE7Ozs7Ozs7OztFQVNFLFlBQUE7QUNIRjtBRE1BO0VBQ0UseUJBQUE7QUNKRjtBRE9BO0VBR00seUJBQUE7QUNQTjtBRFlBOzs7OztFQU1JLGtCQUFBO0VBQ0Esb0JBQUE7RUFDQSx1QkFBQTtFQUNBLGtCQUFBO0VBQ0EscUJBQUE7RUFDQSxvQkFBQTtFQUNBLGVBQUE7RUFDQSxZQUFBO0VBQ0EsVUFBQTtFQUNBLFNBQUE7RUFDQSxjQUFBO0FDWEo7QURMQTs7O0VBc0JJLGtCQUFBO0VBQ0Esd0JBQUE7QUNaSjtBRGNJOzs7RUFDRSxtQkFBQTtBQ1ZOO0FEZ0JFO0VBQ0UsV0FBQTtFQUNBLFdBQUE7RUFDQSxrQkFBQTtFQUNBLGdCQUFBO0VBQ0Esc0JBQUE7QUNkSjtBRGdCSTtFQUNFLGNBQUE7RUFDQSxrQkFBQTtFQUNBLFdBQUE7RUFDQSxZQUFBO0VBQ0EsWUFBQTtFQUNBLFdBQUE7RUFDQSx5QkFBQTtFQUNBLHlDQUFBO0FDZE47QURpQkk7RUFDRTtJQUNFLFlBQUE7SUFDQSxVQUFBO0VDZk47RURrQkk7SUFDRSxVQUFBO0VDaEJOO0VEbUJJO0lBQ0UsVUFBQTtFQ2pCTjtFRG9CSTtJQUNFLFNBQUE7RUNsQk47RURxQkk7SUFDRSxVQUFBO0VDbkJOO0VEc0JJO0lBQ0UsVUFBQTtFQ3BCTjtBQUNGO0FEd0JFO0VBRUksc0JBQUE7RUFDQSxvQ0FBQTtFQUNBLDBDQUFBO0FDdkJOO0FBckZBO0VBR0UsZ0JBQUE7QUFxRkY7QUF4RkE7RURxSEksc0NBQUE7RUFDQSwrQkFBQTtFQUNBLFNBQUE7QUMxQko7QUE3RkE7RUQwSE0sYUFBQTtFQUNBLGlDQUFBO0FDMUJOO0FENEJNOztFQUVFLFlBQUE7RUFDQSxzQ0FBQTtFQUNBLGtCQUFBO0VBQ0EsMkJBQUE7QUMxQlI7QUF4R0E7RUR1SU0sc0NBQUE7QUM1Qk47QUEzR0E7RUQySU0seUJBQUE7QUM3Qk47QUE5R0E7RUQrSU0seUJBQUE7RUFDQSwwQkFBQTtBQzlCTjtBQWxIQTtFRG9KTSxpQkFBQTtFQUNBLGdDQUFBO0VBQ0EsWUFBQTtFQUNBLHNDQUFBO0VBQ0Esa0JBQUE7RUFDQSwyQkFBQTtBQy9CTjtBQTFIQTtFRDRKUSxlQUFBO0FDL0JSO0FBN0hBO0VBTUksdUJBQUE7RUFDQSxvQ0FBQTtBQTBISjtBQWpJQTtFQVdJLGNBQUE7QUF5SEo7QUFySEE7Ozs7OztFQU1FLGNBQUE7QUF1SEYiLCJzb3VyY2VzQ29udGVudCI6WyJAdGV4dENvbG9yOiBibGFjaztcbkBhY3RpdmVFcDogIzAwMjk2NjtcbkBpbnB1dEJhY2tncm91bmQ6ICMxMTExMTE7XG5cbiNtYWxTdGF0dXMsXG4jbWFsVG90YWwsXG4jbWFsRXBpc29kZXMsXG4jbWFsVXNlclJhdGluZyxcbiNtYWxSYXRpbmcsXG4jbWFsVm9sdW1lcyxcbiNtYWxUb3RhbFZvbCxcbiNtYWxUb3RhbENoYSxcbiNBZGRNYWwge1xuICBjb2xvcjogQHRleHRDb2xvcjtcbn1cblxuLm1hbC1zeW5jLWFjdGl2ZSB7XG4gIGJhY2tncm91bmQtY29sb3I6IEBhY3RpdmVFcDtcbn1cblxuI21hbHAge1xuICBzZWxlY3Qge1xuICAgIG9wdGlvbiB7XG4gICAgICBiYWNrZ3JvdW5kLWNvbG9yOiBAaW5wdXRCYWNrZ3JvdW5kO1xuICAgIH1cbiAgfVxufVxuXG4jbWFscCB7XG4gICNtYWxTdGF0dXMsXG4gICNtYWxVc2VyUmF0aW5nLFxuICAjbWFsRXBpc29kZXMsXG4gICNtYWxWb2x1bWVzLFxuICAjbWFsRXBpc29kZXMge1xuICAgIGZvbnQtc2l6ZTogaW5oZXJpdDtcbiAgICBmb250LWZhbWlseTogaW5oZXJpdDtcbiAgICBiYWNrZ3JvdW5kOiB0cmFuc3BhcmVudDtcbiAgICBib3JkZXItY29sb3I6IGdyZXk7XG4gICAgdGV4dC1kZWNvcmF0aW9uOiBub25lO1xuICAgIG91dGxpbmU6IG1lZGl1bSBub25lO1xuICAgIGJvcmRlci13aWR0aDogMDtcbiAgICBoZWlnaHQ6IGF1dG87XG4gICAgcGFkZGluZzogMDtcbiAgICBtYXJnaW46IDA7XG4gICAgbGluZS1oZWlnaHQ6IDE7XG4gIH1cblxuICAjbWFsRXBpc29kZXMsXG4gICNtYWxWb2x1bWVzLFxuICAjbWFsRXBpc29kZXMge1xuICAgIHRleHQtYWxpZ246IGNlbnRlcjtcbiAgICBib3JkZXItYm90dG9tLXdpZHRoOiAxcHg7XG5cbiAgICAmOmZvY3VzIHtcbiAgICAgIGJvcmRlci1jb2xvcjogQHRleHRDb2xvcjtcbiAgICB9XG4gIH1cbn1cblxuI21hbFN5bmNQcm9ncmVzcyB7XG4gICYubXMtbG9hZGluZyB7XG4gICAgaGVpZ2h0OiA0cHg7XG4gICAgd2lkdGg6IDEwMCU7XG4gICAgcG9zaXRpb246IHJlbGF0aXZlO1xuICAgIG92ZXJmbG93OiBoaWRkZW47XG4gICAgYmFja2dyb3VuZC1jb2xvcjogI2RkZDtcblxuICAgICY6OmJlZm9yZSB7XG4gICAgICBkaXNwbGF5OiBibG9jaztcbiAgICAgIHBvc2l0aW9uOiBhYnNvbHV0ZTtcbiAgICAgIGNvbnRlbnQ6ICcnO1xuICAgICAgbGVmdDogLTIwMHB4O1xuICAgICAgd2lkdGg6IDIwMHB4O1xuICAgICAgaGVpZ2h0OiA0cHg7XG4gICAgICBiYWNrZ3JvdW5kLWNvbG9yOiAjMjk4MGI5O1xuICAgICAgYW5pbWF0aW9uOiBsb2FkaW5nLW1hbCAycyBsaW5lYXIgaW5maW5pdGU7XG4gICAgfVxuXG4gICAgQGtleWZyYW1lcyBsb2FkaW5nLW1hbCB7XG4gICAgICAwJSB7XG4gICAgICAgIGxlZnQ6IC0yMDBweDtcbiAgICAgICAgd2lkdGg6IDMwJTtcbiAgICAgIH1cblxuICAgICAgNTAlIHtcbiAgICAgICAgd2lkdGg6IDMwJTtcbiAgICAgIH1cblxuICAgICAgNzAlIHtcbiAgICAgICAgd2lkdGg6IDcwJTtcbiAgICAgIH1cblxuICAgICAgODAlIHtcbiAgICAgICAgbGVmdDogNTAlO1xuICAgICAgfVxuXG4gICAgICA5NSUge1xuICAgICAgICBsZWZ0OiAxMjAlO1xuICAgICAgfVxuXG4gICAgICAxMDAlIHtcbiAgICAgICAgbGVmdDogMTAwJTtcbiAgICAgIH1cbiAgICB9XG4gIH1cblxuICAmLm1zLWRvbmUge1xuICAgIC5tcy1wcm9ncmVzcyB7XG4gICAgICB3aWR0aDogMTAwJSAhaW1wb3J0YW50O1xuICAgICAgYmFja2dyb3VuZC1jb2xvcjogI2ZmNDA4MSAhaW1wb3J0YW50O1xuICAgICAgdHJhbnNpdGlvbjogYmFja2dyb3VuZC1jb2xvciAxcyAhaW1wb3J0YW50O1xuICAgIH1cbiAgfVxufVxuXG4uYm94U3R5bGUoQGJnKSB7XG4gIEBnYXA6IDEwcHg7XG5cbiAgI01hbERhdGEge1xuICAgIGp1c3RpZnktY29udGVudDogZmxleC1zdGFydCAhaW1wb3J0YW50O1xuICAgIGFsaWduLWl0ZW1zOiBzdHJldGNoICFpbXBvcnRhbnQ7XG4gICAgZ2FwOiBAZ2FwO1xuXG4gICAgLm1hbHAtZ3JvdXAge1xuICAgICAgZGlzcGxheTogZmxleDtcbiAgICAgIGZsZXgtZGlyZWN0aW9uOiBjb2x1bW4gIWltcG9ydGFudDtcblxuICAgICAgJiA+IC5tYWxwLWdyb3VwLWZpZWxkLFxuICAgICAgJiA+IC5tYWxwLWdyb3VwLXZhbHVlLXNlY3Rpb24ge1xuICAgICAgICBmbGV4LWdyb3c6IDE7XG4gICAgICAgIGJhY2tncm91bmQtY29sb3I6IEBiZyAhaW1wb3J0YW50O1xuICAgICAgICBib3JkZXItcmFkaXVzOiA0cHg7XG4gICAgICAgIHBhZGRpbmc6IDRweCA4cHggIWltcG9ydGFudDtcbiAgICAgIH1cbiAgICB9XG5cbiAgICBvcHRpb24ge1xuICAgICAgYmFja2dyb3VuZC1jb2xvcjogQGJnICFpbXBvcnRhbnQ7XG4gICAgfVxuXG4gICAgLm1hbHAtZ3JvdXAtbGFiZWwge1xuICAgICAgZGlzcGxheTogYmxvY2sgIWltcG9ydGFudDtcbiAgICB9XG5cbiAgICAubWFscC1ncm91cC1sYWJlbCB7XG4gICAgICBkaXNwbGF5OiBibG9jayAhaW1wb3J0YW50O1xuICAgICAgZm9udC1zaXplOiAxMnB4ICFpbXBvcnRhbnQ7XG4gICAgfVxuXG4gICAgI0FkZE1hbERpdiB7XG4gICAgICBtYXJnaW4tbGVmdDogQGdhcDtcbiAgICAgIGRpc3BsYXk6IGlubGluZS1ibG9jayAhaW1wb3J0YW50O1xuICAgICAgZm9udC1zaXplOiAwO1xuICAgICAgYmFja2dyb3VuZC1jb2xvcjogQGJnICFpbXBvcnRhbnQ7XG4gICAgICBib3JkZXItcmFkaXVzOiA0cHg7XG4gICAgICBwYWRkaW5nOiA0cHggOHB4ICFpbXBvcnRhbnQ7XG5cbiAgICAgICNBZGRNYWwge1xuICAgICAgICBmb250LXNpemU6IDE2cHg7XG4gICAgICB9XG4gICAgfVxuICB9XG59XG4iLCJAaW1wb3J0ICcuLy4uL3BhZ2VzJztcblxuI21hbHAge1xuICAuYm94U3R5bGUoIzY4Njg2ODFjKTtcblxuICBtYXJnaW46IDAgMCAzMHB4O1xuXG4gICNNYWxEYXRhIG9wdGlvbiB7XG4gICAgY29sb3I6IHdoaXRlICFpbXBvcnRhbnQ7XG4gICAgYmFja2dyb3VuZC1jb2xvcjogcmdiKDcxIDcxIDcxKSAhaW1wb3J0YW50O1xuICB9XG5cbiAgc3BhbiB7XG4gICAgY29sb3I6IGluaGVyaXQ7XG4gIH1cbn1cblxuI21hbFJhdGluZyxcbiNtYWxTdGF0dXMsXG4jbWFsRXBpc29kZXMsXG4jbWFsVXNlclJhdGluZyxcbiNtYWxWb2x1bWVzLFxuI0FkZE1hbCB7XG4gIGNvbG9yOiBpbmhlcml0O1xufVxuXG5AYWN0aXZlRXA6ICM5OGNmZjA7XG4iXSwic291cmNlUm9vdCI6IiJ9 */
+    </style>
+    <style>
+        .modal-content-kal.fullscreen {
+            width: 100% !important;
+            height: 100% !important;
+            bottom: 0 !important;
+            left: 0 !important;
+        }
+
+        .modal-content-kal {
+            -webkit-transition: all 0.5s ease;
+            -moz-transition: all 0.5s ease;
+            -o-transition: all 0.5s ease;
+            transition: all 0.5s ease;
+        }
+
+        .floatbutton:hover {
+            background-color: rgb(63, 81, 181) !important;
+        }
+
+        .floatbutton:hover div {
+            background-color: white;
+            border-color: white;
+        }
+
+        .floatbutton div {
+            background-color: black;
+            border-color: black;
+            -webkit-transition: all 0.5s ease;
+            -moz-transition: all 0.5s ease;
+            -o-transition: all 0.5s ease;
+            transition: all 0.5s ease;
+        }
+
+        .floatbutton {
+            z-index: 9999;
+            display: none;
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            border-radius: 50%;
+            font-size: 24px;
+            height: 56px;
+            margin: auto;
+            min-width: 56px;
+            width: 56px;
+            padding: 0;
+            overflow: hidden;
+            background: rgba(158, 158, 158, .2);
+            box-shadow: 0 1px 1.5px 0 rgba(0, 0, 0, .12), 0 1px 1px 0 rgba(0, 0, 0, .24);
+            line-height: normal;
+            border: none;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0;
+            will-change: box-shadow;
+            transition: box-shadow .2s cubic-bezier(.4, 0, 1, 1), background-color .2s cubic-bezier(.4, 0, .2, 1), color .2s cubic-bezier(.4, 0, .2, 1);
+            outline: none;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            vertical-align: middle;
+            padding: 16px !important;
+        }
+
+        .floatbutton.stealth {
+            background: rgba(158, 158, 158, .03);
+        }
+
+        .floatbutton.stealth .open-info-popup {
+            visibility: hidden;
+        }
+
+        .floatbutton.floatHide {
+            visibility: hidden !important;
+        }
+    </style>
+</head>
+
+<body class="">
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/"><img src="/static/logo.png" style="height: 80px;" alt=""></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/study">My notes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/create">Create</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard">Dashboard</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">Logout</a>
+                    </li>
+
+                </ul>
+                <!-- Search bar with datalist// search bar vibe coded ( :( ))-->
+                <form class="d-flex ms-auto" action="/study" method="POST">
+                    <div class="dropdown w-100">
+                        <input class="form-control dropdown-toggle me-2" id="dropdownSearch" type="search" name="query"
+                            placeholder="Lookup files" aria-label="Search" data-bs-toggle="dropdown"
+                            aria-expanded="false" oninput="filterOptions()" onkeydown="navigateOptions(event)">
+                        <ul class="dropdown-menu w-100" id="dropdownOptions" aria-labelledby="dropdownSearch">
+
+
+                            <li><button class="dropdown-item" type="button" onclick="selectOption('test')">test</button>
+                            </li>
+
+
+                        </ul>
+                    </div>
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+                <script>
+                    let currentIndex = -1;
+
+                    function selectOption(value) {
+                        document.getElementById('dropdownSearch').value = value;
+                        currentIndex = -1; // Reset index after selection
+                    }
+
+                    function filterOptions() {
+                        const input = document.getElementById('dropdownSearch').value.toLowerCase();
+                        const options = document.querySelectorAll('#dropdownOptions .dropdown-item');
+                        let visibleCount = 0;
+                        options.forEach(option => {
+                            const text = option.textContent.toLowerCase();
+                            if ((text.includes(input) || input === '') && visibleCount < 5) {
+                                option.style.display = 'block';
+                                visibleCount++;
+                            } else {
+                                option.style.display = 'none';
+                            }
+                        });
+                        currentIndex = -1; // Reset index when filtering
+                    }
+
+                    function navigateOptions(event) {
+                        const options = Array.from(document.querySelectorAll('#dropdownOptions .dropdown-item'))
+                            .filter(option => option.style.display !== 'none');
+                        if (event.key === 'ArrowDown') {
+                            event.preventDefault();
+                            currentIndex = (currentIndex + 1) % options.length;
+                            highlightOption(options);
+                        } else if (event.key === 'ArrowUp') {
+                            event.preventDefault();
+                            currentIndex = (currentIndex - 1 + options.length) % options.length;
+                            highlightOption(options);
+                        } else if (event.key === 'Enter' && currentIndex >= 0) {
+                            event.preventDefault();
+                            options[currentIndex].click();
+                        }
+                    }
+
+                    function highlightOption(options) {
+                        options.forEach((option, index) => {
+                            option.classList.toggle('active', index === currentIndex);
+                        });
+                        if (currentIndex >= 0) {
+                            options[currentIndex].scrollIntoView({ block: 'nearest' });
+                        }
+                    }
+                </script>
+            </div>
+        </div>
+    </nav>
+
+
+    <!-- Add this to the <head> section of layout.html -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <div class="container-fluid">
+
+        <div class="col horizontal">
+
+            <main class="graph-display px-3 horizontal">
+                <!-- Markdown content will be displayed here -->
+                <!-- Basic tree search  -->
+
+
+                <script src="/static/js/tree.js"></script>
+                <div id="calendar" class="tree mt-3">
+                    <div id="calendar" class="tree-node visible-node tree-head"
+                        verbose="<h1>Start of a journey</h1>
+<p>Here is a basic calendar to start your YouTube channel in two weeks. Each section is divided by week, with subsections to organize the important steps.</p>"
+                        details="Overview of the plan" style="top: 30px;">
+
+                        <div class="symbol">calendar <span class="badge visible_count bg-primary">
+                                2</span></div>
+
+                    </div>
+                    <div id="calendar" class="tree-body branch-children" style="z-index: 10;">
+
+
+                        <div class="branch-head d-flex mx-4 mb-2" id="week 1">
+                            <div class="tree-node visible-node" id="week 1" verbose="<h1>Prep phase</h1>
+<p>This is the foundation phase. Lay solid groundwork to stay focused later.</p>" details="Preparation &amp; Planning">
+                                <div class="symbol">week 1
+
+                                    <span
+                                        class="position-absolute top-50 start-0 translate-middle p-2 border border-light rounded-circle node-link">
+                                        <span class="visually-hidden">New alerts</span>
+                                    </span>
+
+
+                                    <span title="children count" class="badge bg-primary child_count">2 </span>
+
+
+                                </div>
+
+                            </div>
+                            <!--Create children recursively by jumping back to the loop with the child as 'tree' (jinja does the work just explaining)-->
+                            <div id="week 1" class="branch-children ">
+
+
+                                <div class="branch-head d-flex mx-4 mb-2" id="setup">
+                                    <div class="tree-node visible-node leaf" verbose="<h1>Be prepared !</h1>
+<ul>
+<li>Create a Google account if you donâ€™t have one.</li>
+<li>Open a YouTube channel via YouTube Studio.</li>
+<li>Choose a clear and memorable channel name.</li>
+<li>Add a profile picture and a banner.</li>
+<li>Write a channel description (talk about your content and personality).</li>
+<li>Enable customization options: links to social media, professional email, <strong>etc</strong>.</li>
+</ul>" details="Channel and tools setup">
+                                        <div class="symbol">setup
+                                            <span
+                                                class="position-absolute top-50 start-0 translate-middle p-2 border border-light rounded-circle node-link">
+                                                <span class="visually-hidden">New alerts</span>
+                                            </span>
+
+                                        </div>
+                                        <div class="details">Channel and tools setup</div>
+                                    </div>
+
+
+                                </div>
+
+
+                                <div class="branch-head d-flex mx-4 mb-2" id="content &amp; ideas">
+                                    <div class="tree-node visible-node leaf" verbose="<h1>Follow these steps</h1>
+<ul>
+<li>Brainstorm 5 to 10 video ideas.</li>
+<li>Choose 1 to 2 simple formats to start with (e.g., vlog, tutorial, reaction).</li>
+<li>Write the script for your first video (or an outline if you prefer light improvisation).</li>
+<li>Watch similar videos for inspiration (without copying).</li>
+</ul>" details="Content brainstorming">
+                                        <div class="symbol">content &amp; ideas
+                                            <span
+                                                class="position-absolute top-50 start-0 translate-middle p-2 border border-light rounded-circle node-link">
+                                                <span class="visually-hidden">New alerts</span>
+                                            </span>
+
+                                        </div>
+                                        <div class="details">Content brainstorming</div>
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="branch-head d-flex mx-4 mb-2" id="week 2">
+                            <div class="tree-node visible-node" id="week 2" verbose="<h1>Take action</h1>
+<p>This is the time to take concrete action.</p>" details="Production &amp; Publication">
+                                <div class="symbol">week 2
+
+                                    <span
+                                        class="position-absolute top-50 start-0 translate-middle p-2 border border-light rounded-circle node-link">
+                                        <span class="visually-hidden">New alerts</span>
+                                    </span>
+
+
+                                    <span title="children count" class="badge bg-primary child_count">2 </span>
+
+
+                                </div>
+
+                            </div>
+                            <!--Create children recursively by jumping back to the loop with the child as 'tree' (jinja does the work just explaining)-->
+                            <div id="week 2" class="branch-children ">
+
+
+                                <div class="branch-head d-flex mx-4 mb-2" id="filming">
+                                    <div class="tree-node visible-node leaf" verbose="<h1>1,2,3 Shoot.</h1>
+<ul>
+<li>Choose a quiet and well-lit location.</li>
+<li>Test your microphone (sound is crucial).</li>
+<li>Record your first video. Donâ€™t be afraid to redo it if necessary.</li>
+</ul>" details="Video recording">
+                                        <div class="symbol">filming
+                                            <span
+                                                class="position-absolute top-50 start-0 translate-middle p-2 border border-light rounded-circle node-link">
+                                                <span class="visually-hidden">New alerts</span>
+                                            </span>
+
+                                        </div>
+                                        <div class="details">Video recording</div>
+                                    </div>
+
+
+                                </div>
+
+
+                                <div class="branch-head d-flex mx-4 mb-2" id="editing">
+                                    <div class="tree-node visible-node leaf" verbose="<h1>The spice</h1>
+<ul>
+<li>Cut out pauses and hesitations.</li>
+<li>Add a simple intro or an end screen.</li>
+<li>Include royalty-free music if it fits.</li>
+<li>Export the video in good quality (1080p recommended).</li>
+</ul>" details="Video editing">
+                                        <div class="symbol">editing
+                                            <span
+                                                class="position-absolute top-50 start-0 translate-middle p-2 border border-light rounded-circle node-link">
+                                                <span class="visually-hidden">New alerts</span>
+                                            </span>
+
+                                        </div>
+                                        <div class="details">Video editing</div>
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <!--TODO : populate node links-->
+                    <div id="node-links" class="node-links mt-3 position-absolute" style="z-index: 1;">
+
+                        <svg id="node-link" width="82" height="206" style="position:absolute; z-index: 10;"
+                            display="display">
+                            <line x1="-78" y1="204" x2="82" y2="20" stroke="black" stroke-width="2"
+                                vector-effect="non-scaling-stroke"></line>
+                        </svg><svg id="node-link" width="259" height="22" style="position:absolute; z-index: 10;"
+                            display="display">
+                            <line x1="195" y1="20" x2="259" y2="20" stroke="black" stroke-width="2"
+                                vector-effect="non-scaling-stroke"></line>
+                        </svg><svg id="node-link" width="259" height="110" style="position:absolute; z-index: 10;"
+                            display="display">
+                            <line x1="195" y1="20" x2="259" y2="108" stroke="black" stroke-width="2"
+                                vector-effect="non-scaling-stroke"></line>
+                        </svg><svg id="node-link" width="82" height="206" style="position:absolute; z-index: 10;"
+                            display="display">
+                            <line x1="-78" y1="204" x2="82" y2="204" stroke="black" stroke-width="2"
+                                vector-effect="non-scaling-stroke"></line>
+                        </svg><svg id="node-link" width="259" height="206" style="position:absolute; z-index: 10;"
+                            display="display">
+                            <line x1="195" y1="204" x2="259" y2="204" stroke="black" stroke-width="2"
+                                vector-effect="non-scaling-stroke"></line>
+                        </svg><svg id="node-link" width="259" height="294" style="position:absolute; z-index: 10;"
+                            display="display">
+                            <line x1="195" y1="204" x2="259" y2="292" stroke="black" stroke-width="2"
+                                vector-effect="non-scaling-stroke"></line>
+                        </svg>
+                    </div>
+                </div>
+                <!--Tree end below-->
+
+
+
+
+                <!-- Add menu items here -->
+
+            </main>
+            <div class="descriptionBox horizontal">
+                <button class="scroll-top" onclick="swapTreeDirection()">
+                    <a href="#calendar">
+                        <!-- Bootstrap Uno Reverse Icon -->
+                        <i class="bi bi-arrow-repeat"></i>
+                    </a>
+                </button>
+
+                <div class="read">
+                    <h1>Start of a journey</h1>
+                    <p>Here is a basic calendar to start your YouTube channel in two weeks. Each section is divided by
+                        week, with subsections to organize the important steps.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+</body>
+<div style="pointer-events: none;display: none; position: fixed;z-index: 9999;left: 0;top: 0;bottom: 0;width: 100%; height: 100%; background-color: transparent; padding: 0; margin: 0; border: 0;"
+    id="info-popup" class="modal-kal">
+    <div style="pointer-events: all; background-color: #f9f9f9; margin: 0; max-width: 100%; max-height: 100%; min-width: 500px; min-height: 300px; width: 550px; height: 90%; position: absolute; bottom: 0%; left: 0%"
+        class="modal-content-kal" id="modal-content"></div>
+</div><button style="" class="open-info-popup floatbutton stealth" dir="ltr">
+    <i style="display: flex; height: 8px; transform: rotate(-45deg); margin-left: -7px; margin-right: -5px; pointer-events: none;"
+        class="my-float open-info-popup">
+        <div style="width: 1px;
+              margin-left: 2px;
+              border-top: 4px solid transparent;
+              border-bottom: 4px solid transparent;
+              border-right-width: 4px;
+              border-right-style: solid;
+              background-color: transparent;"></div>
+        <div style="flex-grow: 1; border-top-left-radius: 2px; border-bottom-left-radius: 2px; margin-left: -1px;">
+        </div>
+        <div style="width: 5px; margin-left: 2px; border-top-right-radius: 2px; border-bottom-right-radius: 2px;"></div>
+    </i>
+</button>
+
+</html>
