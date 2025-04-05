@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+
+{% block main %}
+<div class="container text-center mt-5">
+    <div class="card shadow-sm p-4" style="border-radius: 15px;">
+        <h1 class="mb-4" style="color: #343a40;">Welcome, <span style="color: #007bff;">{{ username }}</span>!</h1>
+        <div
+            style="display: flex;position: relative; justify-content: center; align-content: center ; text-align: center;padding: 5px; margin-bottom: 15px;">
+            <h2 style="color: #6c757d; margin-right: 15px;position: relative; top: 5px;">Your Files</h2>
+            <form method="POST" action="/dashboard" enctype="multipart/form-data" id="uploadForm">
+                <label for="fileUpload" class="btn btn-outline-primary d-flex align-items-center">
+                    <i class="bi bi-plus" style="font-size: 1.5rem;">+</i>
+                </label>
+                <input type="file" id="fileUpload" name="markdown" class="d-none"
+                    onchange="document.getElementById('uploadForm').submit();" />
+            </form>
+        </div>
+        {% if files %}
+        <form method="POST" action="/study" class="mx-auto" style="max-width: 600px;">
+            <div class="list-group">
+                {% for file in files %}
+                <button type="submit" name="query" value="{{ file }}"
+                    class="list-group-item list-group-item-action d-flex align-items-center"
+                    style="transition: transform 0.2s, box-shadow 0.2s;">
+                    <i class="bi bi-file-earmark-text me-3" style="color: #007bff; font-size: 1.5rem;"></i>
+                    <span style="font-size: 1.1rem; color: #495057;">{{ file[:-3] }}</span>
+                </button>
+                {% endfor %}
+            </div>
+        </form>
+        {% else %}
+        <p class="text-muted" style="font-size: 1.2rem;">No files available.</p><br>
+        <p>Create a .md and upload it !</p><br>
+        <p>dont forget to checkout <a href="/create">How to create notes</a></p><br>
+        <a href="/demo">See these demos</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
