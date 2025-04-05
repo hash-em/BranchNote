@@ -12,6 +12,8 @@ This project took many turns from what i thought would be a sharing documents an
 # How to use !
 ==Plug and play==
 
+## Demo [here](https://hechmiko.github.io/BranchNote/)
+
 You just need to download this repository and then click on the 'run.bat' file
 Or move the =='BranchNodes.bat'== which is a shortcut for the former file to your desktop for convenience (do not move 'run.bat' as it only works in this folder)
 
