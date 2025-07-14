@@ -89,7 +89,7 @@ The implementation is much more boring yet much more time consuming i only used 
 # AI usage
 ==beep bop==
 
-AI was somewhat exclusively and heavily used when it came to the **design of pages** as i didn't want to bother with html much although *all of the jinja implementation and the tree structure inside html were my design* and not with AI.
+AI was somewhat exclusively and heavily used when it came to the **css design of pages** as i didn't want to bother with html much although *all of the jinja implementation and the tree structure inside html were my design* and not with AI.
 but yeah having it access the bootstrap library and me just choosing how i envision a certain div to look made the project come to fruition faster.
 
 AI even made the logo awsome!
